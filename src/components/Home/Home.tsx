@@ -8,8 +8,11 @@ import {AddItemPanel} from '../AddItemPanel';
 
 class Home extends React.PureComponent<WithStyles<typeof styles>>{
     public render() {
+
         return (
-            this.renderHome()
+            <div>
+                {this.renderHome()}
+            </div>
         )
     }
 
@@ -25,7 +28,6 @@ class Home extends React.PureComponent<WithStyles<typeof styles>>{
     private SearchPanel = () => (<SearchPanel />);
     private AddItemPanel = () => (<AddItemPanel />);
 }
-
 
 const StyledHome = withStyles(styles)(Home);
 export {StyledHome as Home};

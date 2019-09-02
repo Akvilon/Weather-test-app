@@ -3,6 +3,8 @@ import {connectRouter, routerMiddleware} from 'connected-react-router';
 import {History} from 'history';
 import home, {homeMiddlewares} from './home';
 import {HomeState} from "./home/reducer";
+import {AuthState} from "./auth/reducer";
+import auth, {authMiddlewares} from "./auth";
 
 // @ts-ignore
 const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
@@ -12,13 +14,15 @@ const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDU
 
 
 export interface AppState {
-    home: HomeState
+    home: HomeState;
+    auth: AuthState;
 }
 
 
 const rootReducer = (history: History) => combineReducers(
     {
         home,
+        auth,
         router: connectRouter(history)
     }
 );
@@ -30,7 +34,7 @@ export default (history) => {
         composeEnhancers(
             applyMiddleware(
                 routerMiddleware(history),
-
+                ...authMiddlewares,
             )
         )
     );
