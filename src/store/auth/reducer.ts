@@ -1,4 +1,4 @@
-import {Token} from "../../models/Auth";
+import {Token} from "../../models";
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
 

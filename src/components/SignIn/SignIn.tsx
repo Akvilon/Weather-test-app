@@ -17,7 +17,12 @@ class SignIn extends React.PureComponent<WithStyles<typeof styles>> {
         return (
             <div className={classes.signInWrap}>
                 <div className={classes.signIn}>
-                    <a href={AUTH_URL}>Sign in</a>
+                    <h3>Welcome to</h3>
+                    <h2>WEATHER APP</h2>
+                    <a href={AUTH_URL}>- Sign in -</a>
+                </div>
+                <div className={classes.signInLogo}>
+									<img src={require('../../assets/sun.svg')}  alt="logo"/>
                 </div>
             </div>
 

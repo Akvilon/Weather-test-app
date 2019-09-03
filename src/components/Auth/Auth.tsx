@@ -13,6 +13,7 @@ interface DispatchProps {
 class Auth extends React.Component<DispatchProps & RouteComponentProps> {
 
     public componentDidMount = async () => {
+        console.log('Auth');
         if(this.isValidateCode) {
             const {location} = this.props;
             this.props.onFetchToken(location.search.split('=')[1]);

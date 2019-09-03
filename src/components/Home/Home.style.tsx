@@ -1,6 +1,7 @@
 
 
 export default {
+    home:{},
     homeControls: {
         marginTop: '30px',
         padding: '15px 30px',

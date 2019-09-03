@@ -1,10 +1,11 @@
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
+import { WeatherList } from '../../models';
 
 
 
-export interface HomeState {
-
+export interface WeatherListState {
+    weatherList: WeatherList | undefined
 }
 
 const INITIAL_STATE = {
@@ -12,7 +13,7 @@ const INITIAL_STATE = {
 };
 
 
-export default (state: HomeState = INITIAL_STATE, action: Action<any>) => {
+export default (state: WeatherListState = INITIAL_STATE, action: Action<any>) => {
     switch (action.type) {
         case ACTION_TYPES.SET_WEATHERLIST:
             return {...state, weatherList: action.payload};
