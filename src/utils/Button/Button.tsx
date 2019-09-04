@@ -8,10 +8,10 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps & WithStyles<typeof styles>> = (props) => {
 
-	const {classes} = props;
+	const {classes, onClick} = props;
 	return (
 		<div className={classes.weatherappBtn}>
-			<button>
+			<button onClick={onClick}>
 				{props.children}
 			</button>
 		</div>

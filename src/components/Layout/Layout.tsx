@@ -3,23 +3,34 @@ import {Header} from '../Header';
 import { SignIn } from '../SignIn';
 import styles from './Layout.style';
 import { default as withStyles, WithStyles } from 'react-jss';
+import { connect } from 'react-redux';
+import { AppState } from '../../store';
+import { Dispatch } from 'redux';
+import { Action } from '../../store/types';
+import { readToken } from '../../store/auth';
 
-interface LayoutProps {
+
+interface StateProps {
 	isSignedIn: boolean;
 }
+interface DispatchProps {
+	readToken: () => void;
+}
 
-class Layout extends React.Component<LayoutProps & WithStyles<typeof styles>> {
+class Layout extends React.Component<StateProps & DispatchProps & WithStyles<typeof styles>> {
+
+		public componentDidMount() {
+			this.props.readToken();
+		}
+
     render() {
 			const {classes, isSignedIn} = this.props;
         return (
             <div className={classes.wrapper}>
-							<SignIn />
-							{/*{this.renderContent()}*/}
-							{/*{isSignedIn ? this.renderContent() : <SignIn />}*/}
+							{isSignedIn ? this.renderContent() : <SignIn />}
             </div>
         );
     }
-
 
     private renderContent = () => (
     	<>
@@ -29,6 +40,16 @@ class Layout extends React.Component<LayoutProps & WithStyles<typeof styles>> {
 		);
 }
 
-const StyledLayout = withStyles(styles)(Layout);
+const mapStateToProps = (state: AppState): StateProps => {
+	return {
+		isSignedIn: !!state.auth.token
+	};
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => ({
+	readToken: () => dispatch(readToken())
+});
+
+const StyledLayout = withStyles(styles)(connect<StateProps,DispatchProps,undefined>(mapStateToProps,mapDispatchToProps)(Layout));
 
 export {StyledLayout as Layout};

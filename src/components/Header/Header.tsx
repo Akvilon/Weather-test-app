@@ -35,18 +35,17 @@ class Header extends React.PureComponent<StateProps & DispatchProps & HeaderProp
         );
     }
 
-    private renderAuthControls = () => (<Button onClick={this.props.onSignOut}>Sign out</Button>);
 
-	// private renderAuthControls = () => {
-	// 	if(this.props.isSignedIn){
-	// 		return (
-   //      <>
-	// 				<Button onClick={this.props.onSignOut}>Sign out</Button>
-   //      </>
-	// 		);
-	// 	}
-	// 	else return null;
-	// };
+	private renderAuthControls = () => {
+		if(this.props.isSignedIn){
+			return (
+        <>
+					<Button onClick={this.props.onSignOut}>Sign out</Button>
+        </>
+			);
+		}
+		else return null;
+	};
 }
 
 
@@ -58,7 +57,7 @@ const mapStateToProps = (state: AppState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => {
 	return {
-		onSignOut: () => dispatch(clearToken()),
+		onSignOut: () => dispatch(clearToken())
 	};
 };
 

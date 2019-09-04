@@ -12,6 +12,10 @@ export const setToken = (token: Token) => ({
     payload: token
 });
 
+export const readToken = () => ({
+	type: ACTION_TYPES.READ_TOKEN,
+});
+
 export const clearToken = () => ({
     type: ACTION_TYPES.CLEAR_TOKEN,
 });

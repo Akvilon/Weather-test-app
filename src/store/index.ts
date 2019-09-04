@@ -35,6 +35,7 @@ export default (history) => {
             applyMiddleware(
                 routerMiddleware(history),
                 ...authMiddlewares,
+							  ...homeMiddlewares
             )
         )
     );

@@ -6,7 +6,7 @@ import { Token } from '../../models';
 
 
 const weatherBaseUrl = process.env.REACT_APP_WEATHER_BASE_URL;
-
+const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY;
 
 const fetchWeatherList = async (code: string) => {
 	try {
