@@ -10,7 +10,7 @@ export default {
 			paddingLeft: '15px',
 			outline: 'none',
 			borderRadius: '4px',
-			border: '1px solid #333',
+			border: '1px solid #D87606',
 			color: '#333'
 		}
 	}

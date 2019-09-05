@@ -1,11 +1,25 @@
 import {ACTION_TYPES} from "./constants";
 
 
-export const getUserCoords = () => ({
-    type: ACTION_TYPES.GET_USER_COORDS,
+export const getUserCityWeather = () => ({
+    type: ACTION_TYPES.GET_USER_CITY_WEATHER
 });
 
-export const setUserCoords = (coords) => ({
-	type: ACTION_TYPES.SET_USER_COORDS,
-  payload: coords
+export const setUserCityWeather = (weather) => ({
+	type: ACTION_TYPES.SET_USER_CITY_WEATHER,
+  payload: weather
+});
+
+export const setUserCityImage = (image) => ({
+	type: ACTION_TYPES.SET_USER_CITY_IMAGE,
+	payload: image
+});
+
+export const getWeatherList = () => ({
+	type: ACTION_TYPES.GET_WEATHER_LIST
+});
+
+export const setWeatherList = (weatherList) => ({
+	type: ACTION_TYPES.SET_WEATHER_LIST,
+	payload: weatherList
 });

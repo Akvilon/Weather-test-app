@@ -4,27 +4,32 @@ import {default as withStyles, WithStyles} from 'react-jss';
 import {Row} from '../../utils/Row';
 import {CurrentCityPanel} from '../CurrentCityPanel';
 import {AddItemPanel} from '../AddItemPanel';
-import { WeatherList } from '../WeatherList';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
-import { getUserCoords } from '../../store/home';
 import { AppState } from '../../store';
-import { WeatherModel } from '../../models';
+import { WeatherListModel, WeatherModel } from '../../models';
+import { getUserCityWeather, getWeatherList } from '../../store/home';
+import { CityImage } from '../../models/CityImage';
+import { WeatherList } from '../WeatherList';
 
 
 interface StateProps {
 	weather: WeatherModel | undefined
+	weatherList: WeatherListModel | undefined,
+	imageResults: CityImage | undefined
 }
 
 interface DispatchProps {
-	getUserCoords: () => void;
+	getUserCityWeather: () => void;
+	getWeatherList: () => void;
 }
 
 class Home extends React.PureComponent<StateProps & DispatchProps & WithStyles<typeof styles>>{
 
     public componentDidMount() {
-			this.props.getUserCoords();
+			this.props.getUserCityWeather();
+			this.props.getWeatherList();
     }
 
     public render() {
@@ -42,26 +47,29 @@ class Home extends React.PureComponent<StateProps & DispatchProps & WithStyles<t
         return (
           <>
               <div className={classes.homeControls}>
-								<Row leftPart={this.AddItemPanel()} rightPart={this.CurrentCityPanel()}/>
+								<Row leftPart={this.AddItemPanel()} leftWidth={'40%'} rightWidth={'60%'} rightPart={this.CurrentCityPanel()}/>
               </div>
-              <WeatherList />
+              <WeatherList weatherList={this.props.weatherList}/>
           </>
         );
     };
 
-    private CurrentCityPanel = () => (<CurrentCityPanel weather={this.props.weather}/>);
+    private CurrentCityPanel = () => (<CurrentCityPanel weather={this.props.weather} imageResults={this.props.imageResults}/>);
     private AddItemPanel = () => (<AddItemPanel />);
 }
 
 const mapStateToProps = (state: AppState): StateProps => {
 	return {
-		weather: state.home.weather
-	}
+		weather: state.home.weather,
+		weatherList: state.home.weatherList,
+		imageResults: state.home.imageResults
+	};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => {
 	return {
-		getUserCoords: () => dispatch(getUserCoords()),
+		getUserCityWeather: () => dispatch(getUserCityWeather()),
+		getWeatherList: () => dispatch(getWeatherList())
 	};
 };
 

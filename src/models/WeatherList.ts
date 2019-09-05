@@ -1,5 +1,6 @@
+import { WeatherModel } from './Weather';
 
 
-export interface WeatherList {
-    
+export interface WeatherListModel {
+    weatherList: WeatherModel[]
 }

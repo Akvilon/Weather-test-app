@@ -4,17 +4,26 @@ import styles from './Row.style';
 
 interface RowProps {
     leftPart: React.ReactElement,
-    rightPart: React.ReactElement
+    rightPart: React.ReactElement,
+	  leftWidth: string,
+	  rightWidth: string
 }
 type Props = RowProps & WithStyles<typeof styles>;
 
-const Row: React.FC<Props> = ({leftPart, rightPart, classes}) => {
+const Row: React.FC<Props> = ({leftPart, rightPart, leftWidth, rightWidth, classes}) => {
+
+  const leftPartStyles = {
+    width: leftWidth
+  };
+	const rightPartStyles = {
+		width: rightWidth
+	};
     return (
         <div className={classes.row}>
-            <div className={classes.leftPart}>
+            <div style={leftPartStyles}>
                 {leftPart}
             </div>
-            <div className={classes.rightPart}>
+            <div style={rightPartStyles}>
                 {rightPart}
             </div>
         </div>

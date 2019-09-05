@@ -3,17 +3,17 @@ import {default as withStyles, WithStyles} from 'react-jss';
 import styles from './CurrentCityPanel.style';
 import { WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
-import { Spinner } from '../../utils/Spinner';
+import { CityImage } from '../../models/CityImage';
 
 
 interface CurrentCityPanelProps {
-  weather: WeatherModel | undefined
+  weather: WeatherModel | undefined,
+	imageResults: CityImage | undefined
 }
 
 class CurrentCityPanel extends React.PureComponent<CurrentCityPanelProps & WithStyles<typeof styles>> {
 	render() {
-		const { classes, weather } = this.props;
-		console.log( 'W = ', weather );
+		const { classes, weather, imageResults } = this.props;
 		return (
 		  <div className={classes.currentCityPanel}>
 				{weather ? this.renderCurrentCityWeather() : this.renderSearch()}
@@ -23,17 +23,12 @@ class CurrentCityPanel extends React.PureComponent<CurrentCityPanelProps & WithS
 	}
 
 	private renderCurrentCityWeather = () => {
-	  if(this.props.weather) {
 	      return (
           <>
 						<h3>Weather in your city:</h3>
-						<WeatherCard weather={this.props.weather} width={'65%'}/>
+						<WeatherCard weather={this.props.weather} imageResults={this.props.imageResults} width={'65%'}/>
           </>
         );
-    }else {
-			return <Spinner />;
-    }
-
   };
 
 
