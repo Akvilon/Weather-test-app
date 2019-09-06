@@ -38,7 +38,7 @@ export default {
 
 
 	wrapper: {
-		maxWidth: '1000px',
+		maxWidth: '1024px',
 		width: '100%',
 		height: '100vh',
 		margin: '0 auto',

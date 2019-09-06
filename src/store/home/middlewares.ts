@@ -2,8 +2,8 @@ import axios from "axios";
 import {Store} from "redux";
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
-import { Token, Weather, WeatherModel } from '../../models';
-import { setUserCityImage, setUserCityWeather, setWeatherList } from './actions';
+import { WeatherModel } from '../../models';
+import { setNewWeatherListItem, setUserCityImage, setUserCityWeather, setWeatherList } from './actions';
 import { CityImage } from '../../models/CityImage';
 
 
@@ -12,8 +12,32 @@ const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY;
 
 const unsplashBaseUrl = process.env.REACT_APP_BASE_URL;
 
+const URLS = [
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=London&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Barcelona&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Rome&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Berlin&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Paris&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Madrid&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Kiev&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Prague&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Amsterdam&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Istanbul&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Warsaw&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Brussels&units=metric`
+];
 
-const fetchWeather = async () => {
+const fetchCityWeather = async (name: string) => {
+	try {
+		const CITY_WEATHER_URL = `${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=${name}&units=metric`;
+		const response = await axios.get(CITY_WEATHER_URL);
+		URLS.unshift(CITY_WEATHER_URL);
+		console.log('UUU',URLS);
+		return response.data;
+	}
+	catch (e) {
+		throw e;
+	}
 
 };
 
@@ -76,11 +100,12 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 						// GET THE NAME OF THE CITY
 						const cityName = weather.name;
 						// SEARCHING CITY IMAGE
-						fetchCityImage(accessToken, cityName).then((image: CityImage) => {
-							const imageResults = image.results[0];
-							// SET IMAGE TO THE STORE
-							dispatch(setUserCityImage(imageResults));
-						})
+						// fetchCityImage(accessToken, cityName).then((image: CityImage) => {
+						// 	const imageResults = image.results[0];
+						// 	console.log(imageResults);
+						// 	// SET IMAGE TO THE STORE
+						// 	dispatch(setUserCityImage(imageResults));
+						// })
 					})
 				}, geolocationFailure);
 			}
@@ -90,28 +115,33 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
     }
 		else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
 			try {
-				const URLS = [
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=London&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Barcelona&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Rome&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Berlin&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Paris&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Madrid&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Kiev&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Prague&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Amsterdam&units=metric`,
-					`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Istanbul&units=metric`
-				];
+				console.log('URLS=',URLS);
+				const queryArr = URLS.map(url => axios.get<WeatherModel>(url));
 
-				const queryArr = URLS.map(url => axios.get<Weather>(url));
 				axios.all(queryArr).then(function ( results ) {
 					let weatherList = results.map(weather=>weather.data);
-					dispatch(setWeatherList(weatherList))
+					dispatch(setWeatherList(weatherList));
+
+					const state = getState();
+					const accessToken = state.auth.token.access_token;
+
+					// const names = weatherList.map((item)=>{
+					// 	fetchCityImage(accessToken, item.name).then((image: CityImage) => {
+					// 		console.log('IRRR=',image);
+					// 		// SET IMAGE TO THE STORE
+					// 		// dispatch(setUserCityImage(imageResults));
+					// 	})
+					// });
 				});
 			}
 			catch (e) {
 				throw e;
 			}
+		}
+    else if(action.type === ACTION_TYPES.GET_NEW_WEATHER_LIST_ITEM) {
+				fetchCityWeather(action.payload).then((res)=>{
+					dispatch(setNewWeatherListItem(res));
+				});
 		}
 
     next(action);

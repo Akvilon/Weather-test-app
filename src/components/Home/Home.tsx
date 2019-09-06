@@ -8,15 +8,15 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
 import { AppState } from '../../store';
-import { WeatherListModel, WeatherModel } from '../../models';
+import { WeatherModel } from '../../models';
 import { getUserCityWeather, getWeatherList } from '../../store/home';
-import { CityImage } from '../../models/CityImage';
+import { CityImage } from '../../models';
 import { WeatherList } from '../WeatherList';
 
 
 interface StateProps {
 	weather: WeatherModel | undefined
-	weatherList: WeatherListModel | undefined,
+	weatherList: WeatherModel[] | undefined,
 	imageResults: CityImage | undefined
 }
 
@@ -29,7 +29,9 @@ class Home extends React.PureComponent<StateProps & DispatchProps & WithStyles<t
 
     public componentDidMount() {
 			this.props.getUserCityWeather();
-			this.props.getWeatherList();
+			if(!this.props.weatherList){
+				this.props.getWeatherList();
+			}
     }
 
     public render() {
@@ -43,13 +45,13 @@ class Home extends React.PureComponent<StateProps & DispatchProps & WithStyles<t
     }
 
     private renderHome = () => {
-			const {classes} = this.props;
+			const {classes, weatherList} = this.props;
         return (
           <>
               <div className={classes.homeControls}>
 								<Row leftPart={this.AddItemPanel()} leftWidth={'40%'} rightWidth={'60%'} rightPart={this.CurrentCityPanel()}/>
               </div>
-              <WeatherList weatherList={this.props.weatherList}/>
+              <WeatherList weatherList={weatherList}/>
           </>
         );
     };

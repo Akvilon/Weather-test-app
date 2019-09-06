@@ -5,15 +5,16 @@ import styles from './Input.style';
 interface InputProps {
 	type: string;
 	placeholder: string;
+	value?: string;
 	onChange?: (e: React.SyntheticEvent) => void;
 }
 
 const Input: React.FC<InputProps & WithStyles<typeof styles>> = ( props ) => {
 
-	const {classes, type, placeholder} = props;
+	const {classes, type,onChange, value, placeholder} = props;
 	return (
 		<div className={classes.weatherappInput}>
-			<input type={type} placeholder={placeholder}/>
+			<input type={type} placeholder={placeholder} value={value} onChange={onChange}/>
 		</div>
 	)
 };

@@ -3,7 +3,7 @@ import {default as withStyles, WithStyles} from 'react-jss';
 import styles from './CurrentCityPanel.style';
 import { WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
-import { CityImage } from '../../models/CityImage';
+import { CityImage } from '../../models';
 
 
 interface CurrentCityPanelProps {

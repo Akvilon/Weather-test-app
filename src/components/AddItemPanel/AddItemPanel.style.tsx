@@ -1,6 +1,8 @@
 export default {
 	addPanel: {
-		display: 'flex',
-		alignItems: 'center'
+		'& form': {
+			display: 'flex',
+			alignItems: 'center'
+		}
 	}
 }

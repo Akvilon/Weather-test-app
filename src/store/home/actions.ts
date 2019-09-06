@@ -23,3 +23,14 @@ export const setWeatherList = (weatherList) => ({
 	type: ACTION_TYPES.SET_WEATHER_LIST,
 	payload: weatherList
 });
+
+
+export const getNewWeatherListItem = (item) => ({
+	type: ACTION_TYPES.GET_NEW_WEATHER_LIST_ITEM,
+	payload: item
+});
+
+export const setNewWeatherListItem = (item) => ({
+	type: ACTION_TYPES.SET_NEW_WEATHER_LIST_ITEM,
+	payload: item
+});

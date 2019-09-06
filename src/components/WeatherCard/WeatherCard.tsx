@@ -2,20 +2,23 @@ import * as React from 'react';
 import { default as withStyles, WithStyles } from 'react-jss';
 import styles from './Weather.style';
 import { WeatherModel } from '../../models';
-import { CityImage } from '../../models/CityImage';
+import { CityImage } from '../../models';
 
 
 interface WeatherCardProps {
 	weather: WeatherModel | undefined,
-	imageResults: CityImage | undefined
-	width: string
+	imageResults?: CityImage | undefined
+	width: string,
+	margin?: string
 }
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 	render() {
-		const {weather, imageResults, classes, width} = this.props;
+		const {weather, imageResults,margin, classes, width} = this.props;
+		console.log('ir', imageResults);
 		const style = {
-			width: width
+			width: width,
+			margin: margin
 		};
 		return (
 			<div className={classes.weatherCard} style={style}>

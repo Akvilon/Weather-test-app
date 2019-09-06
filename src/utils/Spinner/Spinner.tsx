@@ -11,7 +11,9 @@ const Spinner: React.FC<WithStyles<typeof styles>> = ({classes}) => {
 				</div>
 				<div className={classes.spinnerCircle}>
 					<span>Loading...</span>
-					<div className={classes.spinnerCircleLayout}></div>
+					<div className={classes.spinnerCircleLayout}>
+
+					</div>
 				</div>
 			</div>
 

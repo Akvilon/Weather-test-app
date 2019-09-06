@@ -5,12 +5,25 @@ import home, {homeMiddlewares} from './home';
 import {HomeState} from "./home/reducer";
 import {AuthState} from "./auth/reducer";
 import auth, {authMiddlewares} from "./auth";
+import { getLocalStorage } from '../utils/storage';
 
 // @ts-ignore
 const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
     // @ts-ignore
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
+
+const loadState = () => {
+	try {
+		const serialisedState = getLocalStorage('app_state');
+		if (!serialisedState) return undefined;
+		return JSON.parse(serialisedState);
+	} catch (err) {
+		return undefined;
+	}
+};
+const OLD_STATE = loadState();
+
 
 
 export interface AppState {
@@ -27,10 +40,13 @@ const rootReducer = (history: History) => combineReducers(
     }
 );
 
+
+
+
 export default (history) => {
     return createStore(
         rootReducer(history),
-        undefined,
+			OLD_STATE,
         composeEnhancers(
             applyMiddleware(
                 routerMiddleware(history),
