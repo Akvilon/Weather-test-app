@@ -1,20 +1,17 @@
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
-import { WeatherModel } from '../../models';
-import { CityImage } from '../../models/CityImage';
-
-
+import { Image, WeatherModel } from '../../models';
 
 export interface HomeState {
 	weather: WeatherModel | undefined,
 	weatherList: WeatherModel[] | undefined,
-	imageResults: CityImage | undefined
+	images: Image[]
 }
 
 const INITIAL_STATE = {
 	weather: undefined,
 	weatherList: undefined,
-	imageResults: undefined
+	images: undefined
 };
 
 
@@ -33,7 +30,10 @@ export default (state: HomeState = INITIAL_STATE, action: Action<any>) => {
             return {...state, weather: action.payload};
 
 			  case ACTION_TYPES.SET_USER_CITY_IMAGE:
-						return {...state, imageResults: action.payload};
+						return {
+							...state,
+							images: [...state.images, action.payload ]
+						};
 
         default :
             return state;

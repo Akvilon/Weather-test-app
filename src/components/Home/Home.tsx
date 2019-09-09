@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
 import { AppState } from '../../store';
-import { WeatherModel } from '../../models';
+import { Image, WeatherModel } from '../../models';
 import { getUserCityWeather, getWeatherList } from '../../store/home';
 import { CityImage } from '../../models';
 import { WeatherList } from '../WeatherList';
@@ -17,7 +17,7 @@ import { WeatherList } from '../WeatherList';
 interface StateProps {
 	weather: WeatherModel | undefined
 	weatherList: WeatherModel[] | undefined,
-	imageResults: CityImage | undefined
+	images: Image[]
 }
 
 interface DispatchProps {
@@ -56,7 +56,7 @@ class Home extends React.PureComponent<StateProps & DispatchProps & WithStyles<t
         );
     };
 
-    private CurrentCityPanel = () => (<CurrentCityPanel weather={this.props.weather} imageResults={this.props.imageResults}/>);
+    private CurrentCityPanel = () => (<CurrentCityPanel weather={this.props.weather} images={this.props.images}/>);
     private AddItemPanel = () => (<AddItemPanel />);
 }
 
@@ -64,7 +64,7 @@ const mapStateToProps = (state: AppState): StateProps => {
 	return {
 		weather: state.home.weather,
 		weatherList: state.home.weatherList,
-		imageResults: state.home.imageResults
+		images: state.home.images
 	};
 };
 

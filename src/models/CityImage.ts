@@ -1,4 +1,5 @@
 
+
 	export interface Urls {
 		raw: string;
 		full: string;

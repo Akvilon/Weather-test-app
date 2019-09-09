@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { default as withStyles, WithStyles } from 'react-jss';
 import styles from './Weather.style';
-import { WeatherModel } from '../../models';
+import { Image, WeatherModel } from '../../models';
 import { CityImage } from '../../models';
 
 
 interface WeatherCardProps {
 	weather: WeatherModel | undefined,
-	imageResults?: CityImage | undefined
+	images: Image[]
 	width: string,
 	margin?: string,
 	isCancel?: boolean,
@@ -16,8 +16,10 @@ interface WeatherCardProps {
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 	render() {
-		const {weather, imageResults,margin, classes, width, isCancel} = this.props;
-		console.log('ir', imageResults);
+		const {weather, images, margin, classes, width, isCancel} = this.props;
+
+		console.log('image = ', images);
+
 		const style = {
 			width: width,
 			margin: margin
@@ -30,7 +32,9 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 					<h3>{weather.weather[0].description}</h3>
 				</div>
 				<div className={classes.weatherCardImg}>
-						<><span>Photo is not available</span></>
+						<>
+							{images ? this.renderImage() : this.renderNoImage()}
+						</>
 				</div>
 				<div className={isCancel? classes.cross : classes.croossInvis} onClick={() =>this.props.onItemClick(weather.id)}>
 					<span>x</span>
@@ -39,8 +43,16 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 		)
 	}
 
-	// private renderImage =() => (<div><img src={} alt="city image"/></div>);
-
+	private renderImage = () => {
+		// const {images} = this.props;
+		// const src = '';
+		// return (
+		// 	<div><img src={src} alt="city image"/></div>
+		// )
+	};
+	private renderNoImage = () => {
+		return <span>Photo is not available</span>
+	}
 }
 
 

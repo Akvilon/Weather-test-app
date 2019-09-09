@@ -98,12 +98,13 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 						// GET THE NAME OF THE CITY
 						const cityName = weather.name;
 						// SEARCHING CITY IMAGE
-						// fetchCityImage(accessToken, cityName).then((image: CityImage) => {
-						// 	const imageResults = image.results[0];
-						// 	console.log(imageResults);
-						// 	// SET IMAGE TO THE STORE
-						// 	dispatch(setUserCityImage(imageResults));
-						// })
+						fetchCityImage(accessToken, cityName).then((response: CityImage) => {
+							if (response.results.length > 0) {
+								const image = response.results[0].urls;
+								// SET IMAGE TO THE STORE
+								dispatch(setUserCityImage(image));
+							}
+						})
 					})
 				}, geolocationFailure);
 			}
@@ -123,13 +124,19 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 					const state = getState();
 					const accessToken = state.auth.token.access_token;
 
-					// const names = weatherList.map((item)=>{
-					// 	fetchCityImage(accessToken, item.name).then((image: CityImage) => {
-					// 		console.log('IRRR=',image);
-					// 		// SET IMAGE TO THE STORE
-					// 		// dispatch(setUserCityImage(imageResults));
-					// 	})
-					// });
+					const newArrr = [];
+					weatherList.map((item)=>{
+						fetchCityImage(accessToken, item.name).then((response: CityImage) => {
+							if (response.results.length > 0) {
+								newArrr.push(response.results);
+
+								// SET IMAGE TO THE STORE
+								// dispatch(setUserCityImage(image));
+							}
+						})
+					});
+
+					console.log('newArrr =',newArrr);
 				});
 			}
 			catch (e) {
