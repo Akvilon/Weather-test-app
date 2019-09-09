@@ -67,7 +67,6 @@ const geolocationFailure = (positionError) => {
 	}
 };
 
-
 const fetchCityImage = async (accessToken: string, cityName: string) => {
 	try {
 		const CITY_PHOTOS_URL = `${unsplashBaseUrl}search/photos?page=1&per_page=1&access_token=${accessToken}&query=${cityName}&orientation=squarish`;
@@ -78,7 +77,6 @@ const fetchCityImage = async (accessToken: string, cityName: string) => {
 		throw e;
 	}
 };
-
 
 
 const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action<any>) => void) => (action: Action<any>) => {
@@ -142,6 +140,20 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 				fetchCityWeather(action.payload).then((res)=>{
 					dispatch(setNewWeatherListItem(res));
 				});
+		}
+		else if(action.type === ACTION_TYPES.DELETE_ITEM) {
+    	const state = getState();
+    	const list = state.home.weatherList;
+    	const id = action.payload;
+
+    	const index = list.findIndex((el)=> el.id === id);
+			const newWeatherList = [
+				...list.slice(0, index),
+				...list.slice(index + 1)
+			];
+
+			dispatch(setWeatherList(newWeatherList));
+
 		}
 
     next(action);

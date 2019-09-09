@@ -9,12 +9,14 @@ interface WeatherCardProps {
 	weather: WeatherModel | undefined,
 	imageResults?: CityImage | undefined
 	width: string,
-	margin?: string
+	margin?: string,
+	isCancel?: boolean,
+	onItemClick?: (id:any) => void
 }
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 	render() {
-		const {weather, imageResults,margin, classes, width} = this.props;
+		const {weather, imageResults,margin, classes, width, isCancel} = this.props;
 		console.log('ir', imageResults);
 		const style = {
 			width: width,
@@ -29,6 +31,9 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 				</div>
 				<div className={classes.weatherCardImg}>
 						<><span>Photo is not available</span></>
+				</div>
+				<div className={isCancel? classes.cross : classes.croossInvis} onClick={() =>this.props.onItemClick(weather.id)}>
+					<span>x</span>
 				</div>
 			</div>
 		)

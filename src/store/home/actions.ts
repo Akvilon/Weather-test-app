@@ -34,3 +34,8 @@ export const setNewWeatherListItem = (item) => ({
 	type: ACTION_TYPES.SET_NEW_WEATHER_LIST_ITEM,
 	payload: item
 });
+
+export const deleteItem = (id) => ({
+	type: ACTION_TYPES.DELETE_ITEM,
+	payload: id
+});

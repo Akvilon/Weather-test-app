@@ -15,22 +15,21 @@ class CurrentCityPanel extends React.PureComponent<CurrentCityPanelProps & WithS
 	render() {
 		const { classes, weather, imageResults } = this.props;
 		return (
-		  <div className={classes.currentCityPanel}>
+			<div className={classes.currentCityPanel}>
 				{weather ? this.renderCurrentCityWeather() : this.renderSearch()}
-      </div>
+			</div>
 
 		);
 	}
 
 	private renderCurrentCityWeather = () => {
-	      return (
-          <>
-						<h3>Weather in your city:</h3>
-						<WeatherCard weather={this.props.weather} imageResults={this.props.imageResults} width={'65%'}/>
-          </>
-        );
-  };
-
+		return (
+			<>
+				<h3>Weather in your city:</h3>
+				<WeatherCard weather={this.props.weather} imageResults={this.props.imageResults} width={'65%'}/>
+			</>
+		);
+	};
 
 
 	private renderSearch = () => ( <div>I'am a search panel</div> );
