@@ -92,19 +92,19 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 						// SET WEATHER TO THE STORE
 						dispatch(setUserCityWeather(weather));
 
-						// GET ACCESS TOKEN FOR NEXT QUERY
-						const state = getState();
-						const accessToken = state.auth.token.access_token;
-						// GET THE NAME OF THE CITY
-						const cityName = weather.name;
-						// SEARCHING CITY IMAGE
-						fetchCityImage(accessToken, cityName).then((response: CityImage) => {
-							if (response.results.length > 0) {
-								const image = response.results[0].urls;
-								// SET IMAGE TO THE STORE
-								dispatch(setUserCityImage(image));
-							}
-						})
+						// // GET ACCESS TOKEN FOR NEXT QUERY
+						// const state = getState();
+						// const accessToken = state.auth.token.access_token;
+						// // GET THE NAME OF THE CITY
+						// const cityName = weather.name;
+						// // SEARCHING CITY IMAGE
+						// fetchCityImage(accessToken, cityName).then((response: CityImage) => {
+						// 	if (response.results.length > 0) {
+						// 		const image = response.results[0].urls;
+						// 		// SET IMAGE TO THE STORE
+						// 		// dispatch(setUserCityImage(image));
+						// 	}
+						// })
 					})
 				}, geolocationFailure);
 			}

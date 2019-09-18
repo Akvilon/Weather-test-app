@@ -27,7 +27,10 @@ class Layout extends React.Component<StateProps & DispatchProps & WithStyles<typ
 			const {classes, isSignedIn} = this.props;
         return (
             <div className={classes.wrapper}>
-							{isSignedIn ? this.renderContent() : <SignIn />}
+							{
+								this.renderContent()
+								/*{isSignedIn ? this.renderContent() : <SignIn />}*/
+							}
             </div>
         );
     }

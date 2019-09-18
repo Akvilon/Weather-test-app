@@ -12,6 +12,8 @@ import { Image, WeatherModel } from '../../models';
 import { getUserCityWeather, getWeatherList } from '../../store/home';
 import { CityImage } from '../../models';
 import { WeatherList } from '../WeatherList';
+import { RouteComponentProps } from 'react-router';
+
 
 
 interface StateProps {
@@ -25,7 +27,7 @@ interface DispatchProps {
 	getWeatherList: () => void;
 }
 
-class Home extends React.PureComponent<StateProps & DispatchProps & WithStyles<typeof styles>>{
+class Home extends React.PureComponent<StateProps & DispatchProps & RouteComponentProps & WithStyles<typeof styles>>{
 
     public componentDidMount() {
 			this.props.getUserCityWeather();
@@ -51,7 +53,7 @@ class Home extends React.PureComponent<StateProps & DispatchProps & WithStyles<t
               <div className={classes.homeControls}>
 								<Row leftPart={this.AddItemPanel()} leftWidth={'40%'} rightWidth={'60%'} rightPart={this.CurrentCityPanel()}/>
               </div>
-              <WeatherList weatherList={weatherList}/>
+              <WeatherList history={this.props.history} weatherList={weatherList}/>
           </>
         );
     };

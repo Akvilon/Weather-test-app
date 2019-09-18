@@ -1,23 +1,26 @@
 import * as React from 'react';
 import { default as withStyles, WithStyles } from 'react-jss';
-import styles from './Weather.style';
+import styles from './WeatherCard.style';
 import { Image, WeatherModel } from '../../models';
 import { CityImage } from '../../models';
 
 
 interface WeatherCardProps {
+	id?: number;
 	weather: WeatherModel | undefined,
 	images: Image[]
 	width: string,
 	margin?: string,
 	isCancel?: boolean,
 	onItemClick?: (id:any) => void
+	onItemDelete?: (id:any) => void
 }
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 	render() {
 		const {weather, images, margin, classes, width, isCancel} = this.props;
 
+		console.log('weather = ', weather);
 		console.log('image = ', images);
 
 		const style = {
@@ -25,21 +28,23 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 			margin: margin
 		};
 		return (
-			<div className={classes.weatherCard} style={style}>
-				<div className={classes.weatherCardInfo}>
-					<h3>{weather.name}, {weather.sys.country}</h3>
-					<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
-					<h3>{weather.weather[0].description}</h3>
-				</div>
-				<div className={classes.weatherCardImg}>
+			<>
+				<div className={classes.weatherCard} style={style} onClick={() => this.props.onItemClick(weather.id)}>
+					<div className={classes.weatherCardInfo}>
+						<h3>{weather.name}, {weather.sys.country}</h3>
+						<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
+						<h3>{weather.weather[0].description}</h3>
+					</div>
+					<div className={classes.weatherCardImg}>
 						<>
 							{images ? this.renderImage() : this.renderNoImage()}
 						</>
+					</div>
 				</div>
-				<div className={isCancel? classes.cross : classes.croossInvis} onClick={() =>this.props.onItemClick(weather.id)}>
+				<div className={isCancel? classes.cross : classes.croossInvis} onClick={() =>this.props.onItemDelete(weather.id)}>
 					<span>x</span>
 				</div>
-			</div>
+			</>
 		)
 	}
 

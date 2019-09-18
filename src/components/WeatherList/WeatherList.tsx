@@ -9,9 +9,12 @@ import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
 import { deleteItem } from '../../store/home';
 import { AppState } from '../../store';
+import { Link } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router';
 
 interface WeatherListProps {
-  weatherList: WeatherModel[] | undefined
+    history: any,
+    weatherList: WeatherModel[] | undefined
 }
 interface StateProps {
     images: Image[]
@@ -33,18 +36,26 @@ class WeatherList extends React.PureComponent<StateProps & WeatherListProps & Di
     }
 
     private renderList = () => {
-        const {weatherList} = this.props;
+        const {weatherList, classes} = this.props;
         return weatherList.map((cityWeather)=>{
             return (
-              <WeatherCard key={cityWeather.id}
-                           weather={cityWeather} width={'30%'}
-                           margin={'15px'}
-                           isCancel={true}
-                           images={this.props.images}
-													 onItemClick={this.props.onItemDelete}/>
+              <div className={classes.weatherCardWrap}>
+								<WeatherCard key={cityWeather.id}
+														 weather={cityWeather} width={'100%'}
+														 margin={'0px'}
+														 isCancel={true}
+														 images={this.props.images}
+														 onItemClick={() => this.onItemClick(cityWeather.id)}
+														 onItemDelete={this.props.onItemDelete}/>
+              </div>
+
             )
         });
     };
+
+    onItemClick = (id) => {
+        this.props.history.push(`/${id}`)
+    }
 }
 
 const mapStateToProps = (state: AppState) => {

@@ -1,6 +1,7 @@
 
 
 export default {
+
 		weatherCard: {
 			minHeight: '130px',
 			display: 'flex',
@@ -9,7 +10,7 @@ export default {
 			boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
 			borderRadius: '2px',
 			cursor: 'pointer',
-			position: 'relative',
+			zIndex: '1'
 		},
 		weatherCardInfo: {
 			display: 'flex',
@@ -37,11 +38,16 @@ export default {
 			}
 		},
 		cross: {
-			display: 'block',
+		  height: '20px',
+			width: '20px',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
 			position: 'absolute',
-			top: '3px',
-			right: '6px',
+			top: '0px',
+			right: '0px',
 			zIndex: 3,
+			cursor: 'pointer',
 			'& span': {
 				fontFamily: 'Trebuchet MS',
 				fontWeight: '600'

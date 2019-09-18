@@ -13,7 +13,7 @@ class App extends React.PureComponent {
 						<Layout>
 							<Switch>
 								{
-									routes.map((route: AppRoute) => <Route key={uuid()} {...route} />)
+									routes.map((route: AppRoute) => <Route exact key={uuid()} {...route} />)
 								}
 							</Switch>
 						</Layout>

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {default as withStyles, WithStyles} from "react-jss";
+import {default as withStyles, WithStyles} from 'react-jss';
 import styles from './SignIn.style';
+import { Button } from '../../utils/Button';
 
 const key = process.env.REACT_APP_CLIENT_ID;
 const redirectUri = process.env.REACT_APP_REDIRECT_URI;
@@ -16,17 +17,22 @@ class SignIn extends React.PureComponent<WithStyles<typeof styles>> {
 
         return (
             <div className={classes.signInWrap}>
-                <div className={classes.signIn}>
-                    <h3>Welcome to</h3>
-                    <h2>WEATHER APP</h2>
-                    <a href={AUTH_URL}>- Sign in -</a>
-                </div>
-                <div className={classes.signInLogo}>
+							<div className={classes.signInInner}>
+								<div className={classes.signInLogo}>
 									<img src={require('../../assets/sun.svg')}  alt="logo"/>
-                </div>
+								</div>
+								<div className={classes.signIn}>
+									<h3>Welcome to</h3>
+									<h2>WEATHER APP</h2>
+									<Button>
+										<a href={AUTH_URL}>Sign in</a>
+									</Button>
+
+								</div>
+							</div>
             </div>
 
-        )
+        );
     }
 }
 

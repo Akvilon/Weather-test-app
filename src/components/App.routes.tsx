@@ -4,6 +4,7 @@ import {Home} from './Home';
 import { match, Redirect } from 'react-router';
 import * as React from 'react';
 import { WeatherCard } from './WeatherCard';
+import { WeatherCardDetails } from './WeatherCardDetails';
 
 export interface AppRoute {
   path: PATHES;
@@ -13,8 +14,13 @@ export interface AppRoute {
 export default  [
 
     {
-		path: PATHES.HOME,
-		render: (props: RouteComponentProps) => <Home {...props}/>,
+			path: PATHES.HOME,
+			render: (props: RouteComponentProps) => <Home {...props}/>
+	  },
+
+	  {
+			path: PATHES.WEATHER_DETAILS,
+			render: (props: RouteComponentProps) => <WeatherCardDetails {...props}/>
 	  },
 
     {
