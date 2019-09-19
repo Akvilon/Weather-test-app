@@ -1,30 +1,43 @@
 import * as React from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router';
-import {v4 as uuid} from 'uuid';
-import {Layout} from './Layout';
-import routes, { AppRoute } from './App.routes';
+import styles from './App.style';
+import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { Home } from './Home';
 import { Auth } from './Auth';
-
-class App extends React.PureComponent {
-  render() {
-      return (
-          <>
-						<Route path={'/auth'} render={this.renderAuth}/>
-						<Layout>
-							<Switch>
-								{
-									routes.map((route: AppRoute) => <Route exact key={uuid()} {...route} />)
-								}
-							</Switch>
-						</Layout>
-          </>
-      );
+import {Redirect} from "react-router";
+import { default as withStyles, WithStyles } from 'react-jss';
+import { WeatherCardDetails } from './WeatherCardDetails';
 
 
-  }
+interface Props {}
+interface State {}
 
-	private renderAuth = (props: RouteComponentProps) => <Auth {...props}/>;
+class App extends React.PureComponent<Props & WithStyles<typeof styles>, State> {
 
+
+
+    render() {
+        const { classes } = this.props;
+        return (
+            <div className={classes.wrapper}>
+                <Switch>
+                    <Route exact path={'/'} render={this.renderHome} />
+                    <Route path={'/auth'} render={this.renderAuth} />
+	                  <Route path={'/:id'} render={this.renderDetails} />
+                    <Route path={'/404'} render={this.renderNotFound} />
+                    <Route path={'/*'} render={this.renderRedirect} />
+                </Switch>
+            </div>
+        )
+    }
+    private renderHome = (props: RouteComponentProps) => <Home {...props}/>;
+		private renderDetails = (props: RouteComponentProps) => {
+
+			return <WeatherCardDetails {...props}/>;
+		};
+		private renderAuth = (props: RouteComponentProps) => <Auth {...props}/>;
+			private renderNotFound = () => (<div>Not found!</div>);
+		private renderRedirect = () => (<Redirect to={'/404'} />)
 }
 
-export  { App};
+const StyledApp = withStyles(styles)(App);
+export { StyledApp as App };

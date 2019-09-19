@@ -4,6 +4,7 @@ import styles from './CurrentCityPanel.style';
 import { Image, WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
 import { CityImage } from '../../models';
+import { SearchPanel } from '../SearchPanel';
 
 
 interface CurrentCityPanelProps {
@@ -32,7 +33,7 @@ class CurrentCityPanel extends React.PureComponent<CurrentCityPanelProps & WithS
 	};
 
 
-	private renderSearch = () => ( <div>I'am a search panel</div> );
+	private renderSearch = () => ( <SearchPanel /> );
 }
 
 const StyledCurrentCityPanel = withStyles(styles)(CurrentCityPanel);

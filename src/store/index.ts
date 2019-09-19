@@ -27,15 +27,15 @@ const OLD_STATE = loadState();
 
 
 export interface AppState {
+		auth: AuthState;
     home: HomeState;
-    auth: AuthState;
 }
 
 
 const rootReducer = (history: History) => combineReducers(
     {
+	      auth,
         home,
-        auth,
         router: connectRouter(history)
     }
 );

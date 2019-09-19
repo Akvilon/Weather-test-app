@@ -33,7 +33,7 @@ export const theme: Theme = {
         accent: green
     },
     typo: {
-        fontFamily: 'Roboto',
-        fontSize: '16'
+        fontFamily: 'ddd', //baseFontFamily.join(','),
+        fontSize: '16' //fontSizeBase
     }
-};
+}

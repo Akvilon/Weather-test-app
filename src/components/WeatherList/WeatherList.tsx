@@ -39,15 +39,14 @@ class WeatherList extends React.PureComponent<StateProps & WeatherListProps & Di
         const {weatherList, classes} = this.props;
         return weatherList.map((cityWeather)=>{
             return (
-              <div className={classes.weatherCardWrap}>
-								<WeatherCard key={cityWeather.id}
-														 weather={cityWeather} width={'100%'}
-														 margin={'0px'}
-														 isCancel={true}
-														 images={this.props.images}
-														 onItemClick={() => this.onItemClick(cityWeather.id)}
-														 onItemDelete={this.props.onItemDelete}/>
-              </div>
+              <div className={classes.weatherCardWrap} key={cityWeather.id}>
+	              <WeatherCard
+									 weather={cityWeather}
+									 isCancel={true}
+									 images={this.props.images}
+									 onItemClick={() => this.onItemClick(cityWeather.id)}
+									 onItemDelete={this.props.onItemDelete}/>
+                </div>
 
             )
         });

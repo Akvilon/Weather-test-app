@@ -2,10 +2,15 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 
-class WeatherCardDetails extends React.PureComponent<RouteComponentProps> {
+interface WeatherCardDetailsProps {
+
+}
+
+class WeatherCardDetails extends React.PureComponent<WeatherCardDetailsProps & RouteComponentProps> {
 
 	componentDidMount() {
 		// const id = this.props.match.params.id;
+		
 	}
 
 	render() {

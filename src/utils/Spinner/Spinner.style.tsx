@@ -2,6 +2,7 @@
 
 export default {
 	spinnerWrapper: {
+		position: 'absolute',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',

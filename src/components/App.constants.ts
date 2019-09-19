@@ -2,7 +2,7 @@
 
 export enum PATHES {
     HOME='/',
-		WEATHER_DETAILS='/:id',
+    AUTH='/auth',
     NOT_FOUND='/404',
     REDIRECT='/*'
 }

@@ -3,7 +3,6 @@
 export default {
 
 		weatherCard: {
-			minHeight: '130px',
 			display: 'flex',
 			justifyContent: 'space-between',
 			padding: '20px',

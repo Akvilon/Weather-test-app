@@ -32,7 +32,6 @@ const fetchCityWeather = async (name: string) => {
 		const CITY_WEATHER_URL = `${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=${name}&units=metric`;
 		const response = await axios.get(CITY_WEATHER_URL);
 		URLS.unshift(CITY_WEATHER_URL);
-		console.log('UUU',URLS);
 		return response.data;
 	}
 	catch (e) {
@@ -111,10 +110,14 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 			else {
 				alert('Your browser does not support geolocation');
 			}
-    }
-		else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
+	}
+	else if(action.type === ACTION_TYPES.SEARCH_USER_CITY_WEATHER ){
+		fetchCityWeather(action.payload).then((res)=>{
+			dispatch(setUserCityWeather(res));
+		});
+	}
+	else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
 			try {
-				console.log('URLS=',URLS);
 				const queryArr = URLS.map(url => axios.get<WeatherModel>(url));
 
 				axios.all(queryArr).then(function ( results ) {
@@ -122,21 +125,22 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 					dispatch(setWeatherList(weatherList));
 
 					const state = getState();
-					const accessToken = state.auth.token.access_token;
+					// if(state.auth.token.access_token){
+					// 	const accessToken = state.auth.token.access_token;
+					// 	const newArrr = [];
+					// 	weatherList.map((item)=>{
+					// 		fetchCityImage(accessToken, item.name).then((response: CityImage) => {
+					// 			if (response.results.length > 0) {
+					// 				newArrr.push(response.results);
+					//
+					// 				// SET IMAGE TO THE STORE
+					// 				// dispatch(setUserCityImage(image));
+					// 			}
+					// 		})
+					// 	});
+					// 	console.log('new Photo Arrr',newArrr);
+					// }
 
-					const newArrr = [];
-					weatherList.map((item)=>{
-						fetchCityImage(accessToken, item.name).then((response: CityImage) => {
-							if (response.results.length > 0) {
-								newArrr.push(response.results);
-
-								// SET IMAGE TO THE STORE
-								// dispatch(setUserCityImage(image));
-							}
-						})
-					});
-
-					console.log('newArrr =',newArrr);
 				});
 			}
 			catch (e) {
@@ -147,8 +151,8 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 				fetchCityWeather(action.payload).then((res)=>{
 					dispatch(setNewWeatherListItem(res));
 				});
-		}
-		else if(action.type === ACTION_TYPES.DELETE_ITEM) {
+	}
+	else if(action.type === ACTION_TYPES.DELETE_ITEM) {
     	const state = getState();
     	const list = state.home.weatherList;
     	const id = action.payload;
@@ -161,7 +165,7 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 
 			dispatch(setWeatherList(newWeatherList));
 
-		}
+	}
 
     next(action);
 };

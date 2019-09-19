@@ -9,7 +9,7 @@ interface WeatherCardProps {
 	id?: number;
 	weather: WeatherModel | undefined,
 	images: Image[]
-	width: string,
+	width?: string,
 	margin?: string,
 	isCancel?: boolean,
 	onItemClick?: (id:any) => void
@@ -19,9 +19,6 @@ interface WeatherCardProps {
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 	render() {
 		const {weather, images, margin, classes, width, isCancel} = this.props;
-
-		console.log('weather = ', weather);
-		console.log('image = ', images);
 
 		const style = {
 			width: width,

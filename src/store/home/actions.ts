@@ -7,7 +7,7 @@ export const getUserCityWeather = () => ({
 
 export const setUserCityWeather = (weather) => ({
 	type: ACTION_TYPES.SET_USER_CITY_WEATHER,
-  payload: weather
+  	payload: weather
 });
 
 export const setUserCityImage = (image) => ({
@@ -38,4 +38,9 @@ export const setNewWeatherListItem = (item) => ({
 export const deleteItem = (id) => ({
 	type: ACTION_TYPES.DELETE_ITEM,
 	payload: id
+});
+
+export const searchUserCity = (item) => ({
+	type: ACTION_TYPES.SEARCH_USER_CITY_WEATHER,
+	payload: item
 });
