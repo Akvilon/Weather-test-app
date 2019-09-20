@@ -13,19 +13,19 @@ import { setLocalStorage } from './utils/storage';
 export const history = createBrowserHistory();
 const store = createStore(history);
 
-const saveState = (state) => {
-	try {
-		const serialisedState = JSON.stringify(state);
-		console.log('TO LOCAL');
-		setLocalStorage('app_state', serialisedState);
-	} catch (e) {
-		throw e
-	}
-};
-
-store.subscribe(() => {
-	saveState(store.getState());
-});
+// const saveState = (state) => {
+// 	try {
+// 		const serialisedState = JSON.stringify(state);
+// 		console.log('TO LOCAL');
+// 		setLocalStorage('app_state', serialisedState);
+// 	} catch (e) {
+// 		throw e
+// 	}
+// };
+//
+// store.subscribe(() => {
+// 	saveState(store.getState());
+// });
 
 ReactDOM.render(
     <Provider store={store}>

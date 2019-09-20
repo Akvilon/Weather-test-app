@@ -36,6 +36,7 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 		this.props.readToken();
 		this.props.getUserCityWeather();
 		this.props.getWeatherList();
+
 	}
 
     render() {
@@ -44,8 +45,8 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 
         return(
             <div className={classes.home}>
-	            {this.renderHome()}
-                {/*{isSignedIn ? this.renderHome() : this.renderSignIn()}*/}
+	            {/*{this.renderHome()}*/}
+                {isSignedIn ? this.renderHome() : this.renderSignIn()}
             </div>
         );
     }

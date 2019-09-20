@@ -2,8 +2,14 @@ import axios from "axios";
 import {Store} from "redux";
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
-import { WeatherModel } from '../../models';
-import { setNewWeatherListItem, setUserCityImage, setUserCityWeather, setWeatherList } from './actions';
+import { WeatherDetails, WeatherModel } from '../../models';
+import {
+	setNewWeatherListItem,
+	setUserCityImage,
+	setUserCityWeather,
+	setWeatherDetails,
+	setWeatherList
+} from './actions';
 import { CityImage } from '../../models/CityImage';
 
 
@@ -32,6 +38,18 @@ const fetchCityWeather = async (name: string) => {
 		const CITY_WEATHER_URL = `${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=${name}&units=metric`;
 		const response = await axios.get(CITY_WEATHER_URL);
 		URLS.unshift(CITY_WEATHER_URL);
+		return response.data;
+	}
+	catch (e) {
+		throw e;
+	}
+
+};
+
+const fetchWeatherDetails = async (name: string) => {
+	try {
+		const CITY_WEATHER_DETAILS_URL = `${weatherBaseUrl}/data/2.5/forecast?q=${name}&units=metric&appid=${weatherApiKey}`;
+		const response = await axios.get<WeatherDetails>(CITY_WEATHER_DETAILS_URL);
 		return response.data;
 	}
 	catch (e) {
@@ -166,6 +184,12 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 			dispatch(setWeatherList(newWeatherList));
 
 	}
+	else if (action.type === ACTION_TYPES.GET_WEATHER_DETAILS) {
+	    fetchWeatherDetails(action.payload).then((res)=>{
+		    dispatch(setWeatherDetails(res));
+	    });
+    }
+
 
     next(action);
 };

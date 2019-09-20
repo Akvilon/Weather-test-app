@@ -1,6 +1,6 @@
 
 
-	export interface Coord {
+	export interface Coords {
 		lon: number;
 		lat: number;
 	}
@@ -39,7 +39,7 @@
 	}
 
 	export interface WeatherModel {
-		coord: Coord;
+		coord: Coords;
 		weather: Weather[];
 		base: string;
 		main: Main;

@@ -24,13 +24,6 @@ export default {
 			}
 		},
 		weatherCardImg: {
-			display: 'flex',
-			alignItems: 'center',
-			height: '100px',
-			width: '100px',
-			background: '#CFCFCF',
-			fontSize: '12px',
-			textAlign: 'center',
 			'& img': {
 				height: '100px',
 				width: '100px',

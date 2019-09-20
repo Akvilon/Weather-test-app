@@ -12,7 +12,6 @@ interface WeatherCardProps {
 	width?: string,
 	margin?: string,
 	isCancel?: boolean,
-	onItemClick?: (id:any) => void
 	onItemDelete?: (id:any) => void
 }
 
@@ -26,7 +25,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 		};
 		return (
 			<>
-				<div className={classes.weatherCard} style={style} onClick={() => this.props.onItemClick(weather.id)}>
+				<div className={classes.weatherCard} style={style}>
 					<div className={classes.weatherCardInfo}>
 						<h3>{weather.name}, {weather.sys.country}</h3>
 						<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
@@ -53,7 +52,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 		// )
 	};
 	private renderNoImage = () => {
-		return <span>Photo is not available</span>
+		return <img src={require('../../assets/city.svg')}  alt="city img"/>
 	}
 }
 

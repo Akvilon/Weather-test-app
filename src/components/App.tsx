@@ -20,23 +20,20 @@ class App extends React.PureComponent<Props & WithStyles<typeof styles>, State> 
         return (
             <div className={classes.wrapper}>
                 <Switch>
-                    <Route exact path={'/'} render={this.renderHome} />
+                    <Route path={'/'} render={this.renderHome} exact/>
                     <Route path={'/auth'} render={this.renderAuth} />
-	                  <Route path={'/:id'} render={this.renderDetails} />
+	                  <Route path={'/details/:id'} render={this.renderDetails} />
                     <Route path={'/404'} render={this.renderNotFound} />
-                    <Route path={'/*'} render={this.renderRedirect} />
+                    <Route  render={this.renderRedirect} />
                 </Switch>
             </div>
         )
     }
-    private renderHome = (props: RouteComponentProps) => <Home {...props}/>;
-		private renderDetails = (props: RouteComponentProps) => {
-
-			return <WeatherCardDetails {...props}/>;
-		};
-		private renderAuth = (props: RouteComponentProps) => <Auth {...props}/>;
+      private renderHome = (props: RouteComponentProps) => <Home {...props}/>;
+		  private renderDetails = (props: RouteComponentProps) => <WeatherCardDetails {...props}/>;
+		  private renderAuth = (props: RouteComponentProps) => <Auth {...props}/>;
 			private renderNotFound = () => (<div>Not found!</div>);
-		private renderRedirect = () => (<Redirect to={'/404'} />)
+		  private renderRedirect = () => (<Redirect to='/404' />)
 }
 
 const StyledApp = withStyles(styles)(App);

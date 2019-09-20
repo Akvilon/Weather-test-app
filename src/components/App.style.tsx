@@ -9,7 +9,9 @@ export default {
             border: '0',
             fontSize: '100%',
             font: 'inherit',
-            verticalAlign: 'baseline',
+	          fontFamily: 'Roboto',
+	          verticalAlign: 'baseline',
+	          boxSizing: 'border-box',
         },
 
         'article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section': {
@@ -20,13 +22,16 @@ export default {
         },
         'ol, ul': {
             listStyle: 'none'
-        }
+        },
+	    'inpt': {
+		    padding: '0'
+	    },
     },
 
     wrapper: {
-        maxWidth: '1024px',
-        margin: 'auto',
-        height: '100vh',
-        position: 'relative' as 'relative'
+	    maxWidth: '1024px',
+	    width: '100%',
+	    height: '100vh',
+	    margin: '0 auto',
     }
 }

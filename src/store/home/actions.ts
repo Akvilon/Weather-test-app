@@ -44,3 +44,12 @@ export const searchUserCity = (item) => ({
 	type: ACTION_TYPES.SEARCH_USER_CITY_WEATHER,
 	payload: item
 });
+
+export const getWeatherDetails = (name) => ({
+	type: ACTION_TYPES.GET_WEATHER_DETAILS,
+	payload: name
+});
+export const setWeatherDetails = (details) => ({
+	type: ACTION_TYPES.SET_WEATHER_DETAILS,
+	payload: details
+});

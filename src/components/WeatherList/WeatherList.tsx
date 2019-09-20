@@ -7,10 +7,10 @@ import { WeatherCard } from '../WeatherCard';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
-import { deleteItem } from '../../store/home';
+import { deleteItem, setWeatherList } from '../../store/home';
 import { AppState } from '../../store';
 import { Link } from 'react-router-dom';
-import { Redirect, RouteComponentProps } from 'react-router';
+import { getLocalStorage, setLocalStorage } from '../../utils/storage';
 
 interface WeatherListProps {
     history: any,
@@ -21,13 +21,28 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  onItemDelete: (id: any) => void
+  onItemDelete: (id: any) => void,
+	setWeatherList: (list: WeatherList) => void
 }
 
 class WeatherList extends React.PureComponent<StateProps & WeatherListProps & DispatchProps & WithStyles<typeof styles>> {
+
+	componentDidMount(){
+		const json = getLocalStorage('LIST');
+		if(json) {
+			console.log('yes');
+			const list = JSON.parse(json);
+			console.log(list);
+			this.props.setWeatherList(list);
+		}
+	}
+	componentDidUpdate(){
+		const list = JSON.stringify(this.props.weatherList);
+		setLocalStorage('LIST', list);
+	}
+
     render() {
         const {classes,weatherList} =this.props;
-        console.log('WWW',weatherList);
         return (
             <div className={classes.weatherList}>
               {weatherList ? this.renderList() : <Spinner />}
@@ -40,21 +55,22 @@ class WeatherList extends React.PureComponent<StateProps & WeatherListProps & Di
         return weatherList.map((cityWeather)=>{
             return (
               <div className={classes.weatherCardWrap} key={cityWeather.id}>
-	              <WeatherCard
-									 weather={cityWeather}
-									 isCancel={true}
-									 images={this.props.images}
-									 onItemClick={() => this.onItemClick(cityWeather.id)}
-									 onItemDelete={this.props.onItemDelete}/>
-                </div>
+	              <Link to={{
+	              	pathname:`/details/${cityWeather.id}`,
+		              state: {city:cityWeather.name}
+	              }}>
+		              <WeatherCard
+										 weather={cityWeather}
+										 isCancel={true}
+										 images={this.props.images}
+										 onItemDelete={this.props.onItemDelete}/>
+	              </Link>
+              </div>
 
             )
         });
     };
 
-    onItemClick = (id) => {
-        this.props.history.push(`/${id}`)
-    }
 }
 
 const mapStateToProps = (state: AppState) => {
@@ -65,7 +81,8 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => {
     return {
-			onItemDelete: (id: any) => dispatch(deleteItem(id))
+			onItemDelete: (id: any) => dispatch(deleteItem(id)),
+	    setWeatherList: (list: WeatherList) => dispatch(setWeatherList(list))
     }
 };
 

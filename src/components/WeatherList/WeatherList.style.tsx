@@ -14,6 +14,10 @@ export default {
 	weatherCardWrap: {
 		position: 'relative',
 		width: '32%',
-		margin: '0px 13px 13px 0px'
+		margin: '0px 13px 13px 0px',
+		'& a': {
+			textDecoration: 'none',
+			color: '#333'
+		}
 	},
 }
