@@ -12,12 +12,13 @@ interface WeatherCardProps {
 	width?: string,
 	margin?: string,
 	isCancel?: boolean,
+	onCardClick: (id:number) => void,
 	onItemDelete?: (id:any) => void
 }
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 	render() {
-		const {weather, images, margin, classes, width, isCancel} = this.props;
+		const {weather, images, margin, classes, width, isCancel, onCardClick} = this.props;
 
 		const style = {
 			width: width,
@@ -25,7 +26,9 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 		};
 		return (
 			<>
-				<div className={classes.weatherCard} style={style}>
+				<div className={classes.weatherCard}
+				     style={style}
+						 onClick={() => onCardClick(weather.id)}>
 					<div className={classes.weatherCardInfo}>
 						<h3>{weather.name}, {weather.sys.country}</h3>
 						<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
@@ -37,6 +40,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 						</>
 					</div>
 				</div>
+
 				<div className={isCancel? classes.cross : classes.croossInvis} onClick={() =>this.props.onItemDelete(weather.id)}>
 					<span>x</span>
 				</div>
@@ -56,8 +60,6 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 	}
 }
 
-
 const StyledWeatherCard = withStyles(styles)(WeatherCard);
-
 export {StyledWeatherCard as WeatherCard};
 

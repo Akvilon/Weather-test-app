@@ -11,6 +11,7 @@ import {
 	setWeatherList
 } from './actions';
 import { CityImage } from '../../models/CityImage';
+import { getLocalStorage } from '../../utils/storage';
 
 
 const weatherBaseUrl = process.env.REACT_APP_WEATHER_BASE_URL;
@@ -41,14 +42,15 @@ const fetchCityWeather = async (name: string) => {
 		return response.data;
 	}
 	catch (e) {
+		alert('Wrong city name');
 		throw e;
 	}
 
 };
 
-const fetchWeatherDetails = async (name: string) => {
+const fetchWeatherDetails = async (id: string) => {
 	try {
-		const CITY_WEATHER_DETAILS_URL = `${weatherBaseUrl}/data/2.5/forecast?q=${name}&units=metric&appid=${weatherApiKey}`;
+		const CITY_WEATHER_DETAILS_URL = `${weatherBaseUrl}/data/2.5/forecast?id=${id}&units=metric&appid=${weatherApiKey}`;
 		const response = await axios.get<WeatherDetails>(CITY_WEATHER_DETAILS_URL);
 		return response.data;
 	}
@@ -136,39 +138,53 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 	}
 	else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
 			try {
-				const queryArr = URLS.map(url => axios.get<WeatherModel>(url));
+				const json = getLocalStorage('LIST');
+				if(json) {
+					const list = JSON.parse(json);
+					dispatch(setWeatherList(list));
+				} else {
+					const queryArr = URLS.map(url => axios.get<WeatherModel>(url));
+					axios.all(queryArr).then(function ( results ) {
+						let weatherList = results.map(weather=>weather.data);
+						dispatch(setWeatherList(weatherList));
 
-				axios.all(queryArr).then(function ( results ) {
-					let weatherList = results.map(weather=>weather.data);
-					dispatch(setWeatherList(weatherList));
+						const state = getState();
+						// if(state.auth.token.access_token){
+						// 	const accessToken = state.auth.token.access_token;
+						// 	const newArrr = [];
+						// 	weatherList.map((item)=>{
+						// 		fetchCityImage(accessToken, item.name).then((response: CityImage) => {
+						// 			if (response.results.length > 0) {
+						// 				newArrr.push(response.results);
+						//
+						// 				// SET IMAGE TO THE STORE
+						// 				// dispatch(setUserCityImage(image));
+						// 			}
+						// 		})
+						// 	});
+						// 	console.log('new Photo Arrr',newArrr);
+						// }
 
-					const state = getState();
-					// if(state.auth.token.access_token){
-					// 	const accessToken = state.auth.token.access_token;
-					// 	const newArrr = [];
-					// 	weatherList.map((item)=>{
-					// 		fetchCityImage(accessToken, item.name).then((response: CityImage) => {
-					// 			if (response.results.length > 0) {
-					// 				newArrr.push(response.results);
-					//
-					// 				// SET IMAGE TO THE STORE
-					// 				// dispatch(setUserCityImage(image));
-					// 			}
-					// 		})
-					// 	});
-					// 	console.log('new Photo Arrr',newArrr);
-					// }
+					});
+				}
 
-				});
 			}
 			catch (e) {
 				throw e;
 			}
 		}
     else if(action.type === ACTION_TYPES.GET_NEW_WEATHER_LIST_ITEM) {
-				fetchCityWeather(action.payload).then((res)=>{
-					dispatch(setNewWeatherListItem(res));
-				});
+    	const state = getState();
+	    const list = state.home.weatherList;
+	    const cityNames = list.map((city) => city.name.toUpperCase());
+
+	    if(cityNames.indexOf(action.payload) !== -1) {
+				alert('You already have this city in your list');
+	    }else {
+		    fetchCityWeather(action.payload).then((res)=>{
+			    dispatch(setNewWeatherListItem(res));
+		    });
+	    }
 	}
 	else if(action.type === ACTION_TYPES.DELETE_ITEM) {
     	const state = getState();

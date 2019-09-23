@@ -38,7 +38,7 @@ export default {
 			position: 'absolute',
 			top: '0px',
 			right: '0px',
-			zIndex: 3,
+			zIndex: 10,
 			cursor: 'pointer',
 			'& span': {
 				fontFamily: 'Trebuchet MS',

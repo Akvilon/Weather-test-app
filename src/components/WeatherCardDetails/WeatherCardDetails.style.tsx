@@ -2,10 +2,12 @@
 
 export default {
 	weatherDetails: {
-		position: 'relative'
+		position: 'relative',
+		height: '100%'
 	},
 	weatherDetailsInfo: {
-		display: 'flex'
+		display: 'flex',
+		paddingTop: '15px'
 	},
 	weatherDetailsInfoImage: {
 		'& img': {
@@ -32,12 +34,13 @@ export default {
 	weatherDetailsList: {
 		display: 'flex',
 		flexWrap: 'wrap',
+		justifyContent: 'space-between',
 		paddingTop: '15px'
 	},
 	weatherDetailsCard: {
-		width: '20%',
+		width: '24%',
 		padding: '15px',
-		margin: '0px 15px 15px 0px',
+		marginBottom: '15px',
 		borderRadius: '2px',
 		boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
 		'& h3': {

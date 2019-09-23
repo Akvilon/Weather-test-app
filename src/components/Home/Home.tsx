@@ -15,6 +15,7 @@ import { Row } from '../../utils/Row';
 import { CurrentCityPanel } from '../CurrentCityPanel';
 import { AddItemPanel } from '../AddItemPanel';
 import { WeatherList } from '../WeatherList';
+import { Spinner } from '../../utils/Spinner';
 
 
 interface StateProps {
@@ -45,28 +46,38 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 
         return(
             <div className={classes.home}>
-	            {/*{this.renderHome()}*/}
                 {isSignedIn ? this.renderHome() : this.renderSignIn()}
             </div>
         );
     }
 
     private renderHome = () => {
-	    const {classes, weatherList} = this.props;
+	    const {weatherList} = this.props;
         return (
-	            <>
-		            <Header />
-		            <div className={classes.homeControls}>
-			            <Row leftPart={this.AddItemPanel()} leftWidth={'40%'} rightWidth={'60%'} rightPart={this.CurrentCityPanel()}/>
-		            </div>
-		            <WeatherList history={this.props.history} weatherList={weatherList}/>
-	            </>
+        	<>
+	          {weatherList ? this.renderContent() : <Spinner />}
+	        </>
         );
     };
 
-		private CurrentCityPanel = () => (<CurrentCityPanel weather={this.props.weather} images={this.props.images}/> );
+		private renderContent = () => {
+			const {classes, weatherList} = this.props;
+			return (
+				<>
+					<Header />
+					<div className={classes.homeControls}>
+						<Row leftPart={this.AddItemPanel()} leftWidth={'40%'} rightWidth={'60%'} rightPart={this.CurrentCityPanel()}/>
+					</div>
+					<WeatherList history={this.props.history} weatherList={weatherList}/>
+				</>
+			);
+		};
+
+		private CurrentCityPanel = () => (<CurrentCityPanel history={this.props.history} weather={this.props.weather} images={this.props.images}/> );
 		private AddItemPanel = () => (<AddItemPanel />);
     private renderSignIn = () => (<SignIn />);
+
+
 }
 
 const mapStateToProps = (state: AppState): StateProps => {

@@ -23,7 +23,7 @@ export default {
             color: '#333',
             '& img': {
                 height: '70px',
-                width: '65px'
+                width: '70px'
             }
         }
     }

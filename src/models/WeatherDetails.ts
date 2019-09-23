@@ -1,6 +1,5 @@
 import { Clouds, Coords, Sys, Wind } from './Weather';
 
-
 export interface WeatherInfo {
 	description: string
 	icon: string;
@@ -18,7 +17,6 @@ export interface MainDetails {
 	temp_max: number;
 	temp_min: number;
 }
-
 
 export interface List {
 	clouds: Clouds;

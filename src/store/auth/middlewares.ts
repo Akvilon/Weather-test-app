@@ -19,7 +19,6 @@ const fetchToken = async (code: string) => {
     try {
         const AUTH_URL = `${authUrl}?client_id=${key}&client_secret=${secretKey}&redirect_uri=${redirectUri}&code=${code}&grant_type=${'authorization_code'}`;
         const response = await axios.post<Token>(AUTH_URL);
-        console.log(response);
         return response.data;
     }
     catch (e) {

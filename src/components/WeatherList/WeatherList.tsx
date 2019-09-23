@@ -11,9 +11,10 @@ import { deleteItem, setWeatherList } from '../../store/home';
 import { AppState } from '../../store';
 import { Link } from 'react-router-dom';
 import { getLocalStorage, setLocalStorage } from '../../utils/storage';
+import { RouteComponentProps } from 'react-router';
 
 interface WeatherListProps {
-    history: any,
+		history: any;
     weatherList: WeatherModel[] | undefined
 }
 interface StateProps {
@@ -27,15 +28,6 @@ interface DispatchProps {
 
 class WeatherList extends React.PureComponent<StateProps & WeatherListProps & DispatchProps & WithStyles<typeof styles>> {
 
-	componentDidMount(){
-		const json = getLocalStorage('LIST');
-		if(json) {
-			console.log('yes');
-			const list = JSON.parse(json);
-			console.log(list);
-			this.props.setWeatherList(list);
-		}
-	}
 	componentDidUpdate(){
 		const list = JSON.stringify(this.props.weatherList);
 		setLocalStorage('LIST', list);
@@ -50,26 +42,28 @@ class WeatherList extends React.PureComponent<StateProps & WeatherListProps & Di
         );
     }
 
-    private renderList = () => {
+    private renderList = ():JSX.Element[] => {
         const {weatherList, classes} = this.props;
-        return weatherList.map((cityWeather)=>{
+        return weatherList.map((cityWeather: WeatherModel)=>{
             return (
-              <div className={classes.weatherCardWrap} key={cityWeather.id}>
-	              <Link to={{
-	              	pathname:`/details/${cityWeather.id}`,
-		              state: {city:cityWeather.name}
-	              }}>
+              <div className={classes.weatherCardWrap}
+                   key={cityWeather.id}>
 		              <WeatherCard
 										 weather={cityWeather}
 										 isCancel={true}
 										 images={this.props.images}
+										 onCardClick={this.onCardClick}
 										 onItemDelete={this.props.onItemDelete}/>
-	              </Link>
+
               </div>
 
             )
         });
     };
+
+    private onCardClick = (id) => {
+			this.props.history.push(`/details/${id}`);
+    }
 
 }
 
