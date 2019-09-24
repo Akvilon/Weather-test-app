@@ -37,7 +37,6 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 		this.props.readToken();
 		this.props.getUserCityWeather();
 		this.props.getWeatherList();
-
 	}
 
     render() {
@@ -82,10 +81,10 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 
 const mapStateToProps = (state: AppState): StateProps => {
     return {
+	    isSignedIn: !!state.auth.token,
 	    weather: state.home.weather,
 	    weatherList: state.home.weatherList,
-	    images: state.home.images,
-	    isSignedIn: !!state.auth.token
+	    images: state.home.images
     };
 };
 const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => ({

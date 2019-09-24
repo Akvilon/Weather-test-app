@@ -17,6 +17,11 @@ interface WeatherCardProps {
 }
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
+
+	componentDidMount() {
+		console.log(this.props.weather.weather[0].icon);
+	}
+
 	render() {
 		const {weather, images, margin, classes, width, isCancel, onCardClick} = this.props;
 
@@ -32,7 +37,11 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 					<div className={classes.weatherCardInfo}>
 						<h3>{weather.name}, {weather.sys.country}</h3>
 						<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
-						<h3>{weather.weather[0].description}</h3>
+						<div className={classes.weatherConditions}>
+							<h3>{weather.weather[0].description}</h3>
+							<img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt="condition icon"/>
+						</div>
+
 					</div>
 					<div className={classes.weatherCardImg}>
 						<>

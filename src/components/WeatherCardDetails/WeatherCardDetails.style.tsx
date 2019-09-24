@@ -58,6 +58,17 @@ export default {
 			color: '#D87606'
 		}
 	},
+	weatherDetailsConditions: {
+		display: 'flex',
+		alignItems: 'flex-end',
+		'& img': {
+			height: '30px',
+			width: '30px',
+			position: 'relative',
+			top: '5px',
+			marginLeft: '15px'
+		}
+	},
 	backArrow: {
 		position: 'fixed',
 		top: '35px',

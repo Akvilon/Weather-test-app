@@ -21,6 +21,16 @@ export default {
 			},
 			'& h3:first-letter': {
 				textTransform: 'uppercase'
+			},
+		},
+		weatherConditions: {
+			display: 'flex',
+			alignItems: 'flex-end',
+			'& img': {
+				height: '50px',
+				width: '50px',
+				position: 'relative',
+				top: '12px'
 			}
 		},
 		weatherCardImg: {

@@ -69,7 +69,11 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 						<h4>Temperature - {day.main.temp} &deg;</h4>
 						<h4>Humidity - {day.main.humidity}</h4>
 						<h4>Pressure - {day.main.pressure}</h4>
-						<h5>{day.weather[0].description}</h5>
+						<div className={classes.weatherDetailsConditions}>
+							<h5>{day.weather[0].description}</h5>
+							<img src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`} alt="condition icon"/>
+						</div>
+
 					</div>
 						);
 					})}

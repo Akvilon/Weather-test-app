@@ -7,7 +7,7 @@ export default {
 		justifyContent: 'space-between',
 		'& h2':{
 			fontWeight: '500'
-		},
+		}
 	},
 	notYourCity: {
 		display: 'flex',

@@ -6,14 +6,16 @@ export interface HomeState {
 	weather: WeatherModel | undefined,
 	weatherDetails: WeatherDetails | undefined,
 	weatherList: WeatherModel[] | undefined,
-	images: Image[]
+	images: Image[],
+	icons: []
 }
 
 const INITIAL_STATE = {
 	weather: undefined,
 	weatherDetails: undefined,
 	weatherList: undefined,
-	images: undefined
+	images: undefined,
+	icons: undefined
 };
 
 

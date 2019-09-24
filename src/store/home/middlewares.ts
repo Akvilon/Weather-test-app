@@ -10,7 +10,7 @@ import {
 	setWeatherDetails,
 	setWeatherList
 } from './actions';
-import { CityImage } from '../../models/CityImage';
+import { CityImage } from '../../models';
 import { getLocalStorage } from '../../utils/storage';
 
 
@@ -205,7 +205,6 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 		    dispatch(setWeatherDetails(res));
 	    });
     }
-
 
     next(action);
 };
