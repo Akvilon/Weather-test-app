@@ -18,9 +18,6 @@ interface WeatherCardProps {
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 
-	componentDidMount() {
-		console.log(this.props.weather.weather[0].icon);
-	}
 
 	render() {
 		const {weather, images, margin, classes, width, isCancel, onCardClick} = this.props;

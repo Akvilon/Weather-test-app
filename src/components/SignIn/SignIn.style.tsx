@@ -1,6 +1,6 @@
 
 
-export default {
+export default (theme) => ({
     signInWrap: {
         display: 'flex',
 			  flexDirection: 'column',
@@ -19,25 +19,19 @@ export default {
 				flexDirection: 'column',
 				alignItems: 'center',
         padding: '30px',
-        background: '#fff',
         borderRadius: '4px',
+	      background: theme.palette.colors.panelColor,
         boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
         '& h2': {
             fontSize: '20px',
-					  color: '#333',
+					  color: theme.palette.colors.text,
             padding: '10px 0px 30px',
         },
 			  '& h3': {
             fontSize: '20px',
-					  color: '#333'
+					  color: theme.palette.colors.text
 			  },
-        '& a': {
-            display: 'block',
-            textDecoration: 'none',
-            fontSize: '1.5em',
-            color: '#fff',
-            textAlign: 'center',
-        }
+
     },
     signInLogo: {
 
@@ -59,4 +53,4 @@ export default {
 			transform: 'translate(100px)'
 		}
 	},
-}
+})

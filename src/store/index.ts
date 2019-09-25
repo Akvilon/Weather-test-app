@@ -13,24 +13,10 @@ const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDU
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-// const loadState = () => {
-// 	try {
-// 		const serialisedState = getLocalStorage('app_state');
-// 		if (!serialisedState) return undefined;
-// 		return JSON.parse(serialisedState);
-// 	} catch (err) {
-// 		return undefined;
-// 	}
-// };
-// const OLD_STATE = loadState();
-
-
-
 export interface AppState {
 		auth: AuthState;
     home: HomeState;
 }
-
 
 const rootReducer = (history: History) => combineReducers(
     {
@@ -39,9 +25,6 @@ const rootReducer = (history: History) => combineReducers(
         router: connectRouter(history)
     }
 );
-
-
-
 
 export default (history) => {
     return createStore(

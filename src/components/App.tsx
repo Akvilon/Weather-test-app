@@ -1,18 +1,11 @@
 import * as React from 'react';
 import styles from './App.style';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import { Home } from './Home';
-import { Auth } from './Auth';
-import {Redirect} from "react-router";
+import { Route, Switch } from 'react-router-dom';
 import { default as withStyles, WithStyles } from 'react-jss';
-import { WeatherCardDetails } from './WeatherCardDetails';
 import routes, { AppRoute } from './App.routes';
 import { v4 as uuid } from 'uuid';
 
-interface Props {}
-interface State {}
-
-class App extends React.PureComponent<Props & WithStyles<typeof styles>, State> {
+class App extends React.PureComponent<WithStyles<typeof styles>> {
 
     render() {
         const { classes } = this.props;

@@ -1,6 +1,6 @@
 
 
-export default {
+export default (theme) => ({
 	weatherappInput: {
 		'& input':{
 			height: '40px',
@@ -10,8 +10,8 @@ export default {
 			paddingLeft: '15px',
 			outline: 'none',
 			borderRadius: '4px',
-			border: '1px solid #D87606',
+			border: `1px solid ${theme.palette.colors.borderText}`,
 			color: '#333'
 		}
 	}
-}
+})

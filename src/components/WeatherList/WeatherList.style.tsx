@@ -1,6 +1,6 @@
 
 
-export default {
+export default (theme) => ({
 	weatherList: {
 		minHeight: '540px',
 		position: 'relative',
@@ -9,6 +9,7 @@ export default {
 		flexWrap: 'wrap',
 		marginTop: '15px',
 		marginBottom:'15px',
+		background: theme.palette.colors.panelColor,
 		boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
 	},
 	weatherCardWrap: {
@@ -17,4 +18,4 @@ export default {
 		margin: '0px 13px 13px 0px'
 	},
 
-}
+})

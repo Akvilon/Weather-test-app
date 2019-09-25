@@ -10,6 +10,11 @@ export const setUserCityWeather = (weather) => ({
   	payload: weather
 });
 
+export const setCityImages = (images) => ({
+	type: ACTION_TYPES.SET_CITY_IMAGES,
+	payload: images
+});
+
 export const setUserCityImage = (image) => ({
 	type: ACTION_TYPES.SET_USER_CITY_IMAGE,
 	payload: image
@@ -52,4 +57,9 @@ export const getWeatherDetails = (id) => ({
 export const setWeatherDetails = (details) => ({
 	type: ACTION_TYPES.SET_WEATHER_DETAILS,
 	payload: details
+});
+
+export const setActiveTheme = (theme) => ({
+	type: ACTION_TYPES.SET_ACTIVE_THEME,
+	payload: theme
 });

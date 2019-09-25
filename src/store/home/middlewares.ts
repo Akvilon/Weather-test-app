@@ -2,7 +2,7 @@ import axios from "axios";
 import {Store} from "redux";
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
-import { WeatherDetails, WeatherModel } from '../../models';
+import { Coords, WeatherDetails, WeatherModel } from '../../models';
 import {
 	setNewWeatherListItem,
 	setUserCityImage,
@@ -11,7 +11,7 @@ import {
 	setWeatherList
 } from './actions';
 import { CityImage } from '../../models';
-import { getLocalStorage } from '../../utils/storage';
+import { getLocalStorage, setLocalStorage } from '../../utils/storage';
 
 
 const weatherBaseUrl = process.env.REACT_APP_WEATHER_BASE_URL;
@@ -112,17 +112,26 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 						dispatch(setUserCityWeather(weather));
 
 						// // GET ACCESS TOKEN FOR NEXT QUERY
-						// const state = getState();
+						const state = getState();
 						// const accessToken = state.auth.token.access_token;
-						// // GET THE NAME OF THE CITY
-						// const cityName = weather.name;
-						// // SEARCHING CITY IMAGE
+						// GET THE NAME OF THE CITY
+						const cityName = weather.name;
+						// SEARCHING CITY IMAGE
 						// fetchCityImage(accessToken, cityName).then((response: CityImage) => {
-						// 	if (response.results.length > 0) {
-						// 		const image = response.results[0].urls;
-						// 		// SET IMAGE TO THE STORE
-						// 		// dispatch(setUserCityImage(image));
-						// 	}
+						// console.log(response.results);
+						// if(response.results) {
+						// 	dispatch(setUserCityImage(response.results));
+						// }
+							// if (response.results.length > 0) {
+							// 	const image = response.results.map((x)=>x.urls.small);
+							//
+							// 	// SET IMAGE TO THE LOCAL STORAGE
+							// 	const imgArr = JSON.stringify(image);
+							// 	setLocalStorage('IMAGES', imgArr);
+							// 	// SET IMAGE TO THE STORE
+							// 	dispatch(setUserCityImage(image));
+							//
+							// }
 						// })
 					})
 				}, geolocationFailure);
@@ -132,9 +141,10 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 			}
 	}
 	else if(action.type === ACTION_TYPES.SEARCH_USER_CITY_WEATHER ){
-		fetchCityWeather(action.payload).then((res)=>{
-			dispatch(setUserCityWeather(res));
-		});
+
+	    fetchCityWeather(action.payload).then((res)=>{
+		    dispatch(setUserCityWeather(res));
+	    });
 	}
 	else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
 			try {
@@ -149,21 +159,29 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 						dispatch(setWeatherList(weatherList));
 
 						const state = getState();
-						// if(state.auth.token.access_token){
-						// 	const accessToken = state.auth.token.access_token;
-						// 	const newArrr = [];
-						// 	weatherList.map((item)=>{
-						// 		fetchCityImage(accessToken, item.name).then((response: CityImage) => {
-						// 			if (response.results.length > 0) {
-						// 				newArrr.push(response.results);
-						//
-						// 				// SET IMAGE TO THE STORE
-						// 				// dispatch(setUserCityImage(image));
-						// 			}
-						// 		})
-						// 	});
-						// 	console.log('new Photo Arrr',newArrr);
-						// }
+						if(state.auth.token.access_token){
+							const accessToken = state.auth.token.access_token;
+
+							// const storeImages = getLocalStorage('IMAGES');
+							// if(storeImages) {
+							// 	const list = JSON.parse(storeImages);
+							// 	dispatch(setUserCityImage(list));
+							// }else {
+							// 	const imagesArr = [];
+							// 	weatherList.map((item)=>{
+							// 		fetchCityImage(accessToken, item.name).then((response: CityImage) => {
+							// 			if (response.results) {
+							// 				imagesArr.push(response.results);
+							//
+							// 				const list = JSON.stringify(imagesArr);
+							// 				setLocalStorage('IMAGES', list);
+							// 				// SET IMAGE TO THE STORE
+							// 				dispatch(setUserCityImage(imagesArr));
+							// 			}
+							// 		})
+							// 	});
+							// }
+						}
 
 					});
 				}
