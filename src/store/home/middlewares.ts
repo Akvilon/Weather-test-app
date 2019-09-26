@@ -4,6 +4,7 @@ import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
 import { Coords, WeatherDetails, WeatherModel } from '../../models';
 import {
+	setCityImages,
 	setNewWeatherListItem,
 	setUserCityImage,
 	setUserCityWeather,
@@ -16,13 +17,14 @@ import { getLocalStorage, setLocalStorage } from '../../utils/storage';
 
 const weatherBaseUrl = process.env.REACT_APP_WEATHER_BASE_URL;
 const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY;
-
 const unsplashBaseUrl = process.env.REACT_APP_BASE_URL;
+const pixabayBaseUrl = process.env.REACT_APP_PIXABAY_BASE_URL;
+const pixabayApiKey = process.env.REACT_APP_PIXABAY_API_KEY;
 
 const URLS = [
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=London&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Barcelona&units=metric`,
-	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Rome&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Milano&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Berlin&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Paris&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Madrid&units=metric`,
@@ -33,6 +35,8 @@ const URLS = [
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Warsaw&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Brussels&units=metric`
 ];
+
+
 
 const fetchCityWeather = async (name: string) => {
 	try {
@@ -86,10 +90,10 @@ const geolocationFailure = (positionError) => {
 	}
 };
 
-const fetchCityImage = async (accessToken: string, cityName: string) => {
+const fetchCityImage = async (cityName: string) => {
 	try {
-		const CITY_PHOTOS_URL = `${unsplashBaseUrl}search/photos?page=1&per_page=1&access_token=${accessToken}&query=${cityName}&orientation=squarish`;
-		const response = await axios.get<CityImage>(CITY_PHOTOS_URL);
+		const CITY_PHOTOS_URL = `${pixabayBaseUrl}?key=${pixabayApiKey}&q=${cityName}&image_type=photo&category=buildings&page=1&per_page=3`;
+		const response = await axios.get(CITY_PHOTOS_URL);
 		return response.data;
 	}
 	catch (e) {
@@ -113,7 +117,7 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 
 						// // GET ACCESS TOKEN FOR NEXT QUERY
 						const state = getState();
-						// const accessToken = state.auth.token.access_token;
+						const accessToken = state.auth.token.access_token;
 						// GET THE NAME OF THE CITY
 						const cityName = weather.name;
 						// SEARCHING CITY IMAGE
@@ -149,39 +153,37 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 	else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
 			try {
 				const json = getLocalStorage('LIST');
-				if(json) {
+				const storeImages = getLocalStorage('IMAGES');
+				if(json && storeImages) {
 					const list = JSON.parse(json);
 					dispatch(setWeatherList(list));
+					const images = JSON.parse(storeImages);
+					dispatch(setCityImages(images));
+
 				} else {
 					const queryArr = URLS.map(url => axios.get<WeatherModel>(url));
 					axios.all(queryArr).then(function ( results ) {
 						let weatherList = results.map(weather=>weather.data);
 						dispatch(setWeatherList(weatherList));
 
-						const state = getState();
-						if(state.auth.token.access_token){
-							const accessToken = state.auth.token.access_token;
+						const imagesArr = [];
+						weatherList.map((item)=>{
+							fetchCityImage(item.name).then((response) => {
 
-							// const storeImages = getLocalStorage('IMAGES');
-							// if(storeImages) {
-							// 	const list = JSON.parse(storeImages);
-							// 	dispatch(setUserCityImage(list));
-							// }else {
-							// 	const imagesArr = [];
-							// 	weatherList.map((item)=>{
-							// 		fetchCityImage(accessToken, item.name).then((response: CityImage) => {
-							// 			if (response.results) {
-							// 				imagesArr.push(response.results);
-							//
-							// 				const list = JSON.stringify(imagesArr);
-							// 				setLocalStorage('IMAGES', list);
-							// 				// SET IMAGE TO THE STORE
-							// 				dispatch(setUserCityImage(imagesArr));
-							// 			}
-							// 		})
-							// 	});
-							// }
-						}
+								if(response && response.hits[0].webformatURL) {
+									const imgObj = {
+										city: item.name,
+										img: response.hits[0].webformatURL
+									};
+									imagesArr.push(imgObj);
+									// SET IMAGE TO THE LOCAL STORAGE
+									const imgs = JSON.stringify(imagesArr);
+									setLocalStorage('IMAGES', imgs);
+									// SET IMAGE TO THE STORE
+									dispatch(setCityImages(imagesArr));
+								}
+							})
+						});
 
 					});
 				}
@@ -220,6 +222,9 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 	}
 	else if (action.type === ACTION_TYPES.GET_WEATHER_DETAILS) {
 	    fetchWeatherDetails(action.payload).then((res)=>{
+
+	    	const cardDetails = JSON.stringify(res);
+	    	setLocalStorage('details', cardDetails);
 		    dispatch(setWeatherDetails(res));
 	    });
     }

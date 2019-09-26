@@ -9,7 +9,7 @@ import { default as withStyles, WithStyles } from 'react-jss';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
 import { readToken } from '../../store/auth';
-import { Image, WeatherModel } from '../../models';
+import { CityImage, WeatherModel } from '../../models';
 import { getUserCityWeather, getWeatherList } from '../../store/home';
 import { Row } from '../../utils/Row';
 import { CurrentCityPanel } from '../CurrentCityPanel';
@@ -21,7 +21,7 @@ import { Spinner } from '../../utils/Spinner';
 interface StateProps {
 	weather: WeatherModel | undefined
 	weatherList: WeatherModel[] | undefined,
-	images: Image[],
+	images: CityImage[],
 	isSignedIn: boolean;
 }
 

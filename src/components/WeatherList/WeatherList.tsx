@@ -2,23 +2,22 @@ import * as React from 'react';
 import styles from './WeatherList.style';
 import {default as withStyles, WithStyles} from 'react-jss';
 import { Spinner } from '../../utils/Spinner/Spinner';
-import { Image, WeatherModel } from '../../models';
+import { CityImage, WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
 import { deleteItem, setWeatherList } from '../../store/home';
 import { AppState } from '../../store';
-import { Link } from 'react-router-dom';
-import { getLocalStorage, setLocalStorage } from '../../utils/storage';
-import { RouteComponentProps } from 'react-router';
+import { setLocalStorage } from '../../utils/storage';
+
 
 interface WeatherListProps {
 		history: any;
     weatherList: WeatherModel[] | undefined
 }
 interface StateProps {
-    images: Image[]
+    images: CityImage[]
 }
 
 interface DispatchProps {

@@ -1,12 +1,12 @@
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
-import { Image, WeatherDetails, WeatherModel } from '../../models';
+import { CityImage, WeatherDetails, WeatherModel } from '../../models';
 
 export interface HomeState {
 	weather: WeatherModel | undefined,
 	weatherDetails: WeatherDetails | undefined,
 	weatherList: WeatherModel[] | undefined,
-	images: Image[],
+	images: CityImage[],
 	activeTheme: string
 }
 

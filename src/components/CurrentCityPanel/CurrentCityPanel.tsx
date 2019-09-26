@@ -1,17 +1,14 @@
 import * as React from 'react';
 import {default as withStyles, WithStyles} from 'react-jss';
 import styles from './CurrentCityPanel.style';
-import { Image, WeatherModel } from '../../models';
+import { CityImage, WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
-import { CityImage } from '../../models';
 import { SearchPanel } from '../SearchPanel';
 import { connect } from 'react-redux';
-import { readToken } from '../../store/auth';
-import { getUserCityWeather, getWeatherList } from '../../store/home';
 import { Action } from '../../store/types';
 import { Dispatch } from 'redux';
-import { setUserCityWeather } from '../../store/home/actions';
-import { setLocalStorage } from '../../utils/storage';
+import { setUserCityWeather } from '../../store/home/';
+
 
 
 
@@ -22,7 +19,7 @@ interface DispatchProps {
 interface CurrentCityPanelProps {
 	history: any;
   weather: WeatherModel | undefined,
-	images: Image[]
+	images: CityImage[]
 }
 
 class CurrentCityPanel extends React.PureComponent<DispatchProps & CurrentCityPanelProps & WithStyles<typeof styles>> {

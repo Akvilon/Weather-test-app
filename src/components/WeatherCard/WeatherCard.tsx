@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { default as withStyles, WithStyles } from 'react-jss';
 import styles from './WeatherCard.style';
-import { Image, WeatherModel } from '../../models';
-import { CityImage } from '../../models';
+import { CityImage, WeatherModel } from '../../models';
 
 
 interface WeatherCardProps {
 	id?: number;
 	weather: WeatherModel | undefined,
-	images: Image[]
+	images: CityImage[]
 	width?: string,
 	margin?: string,
 	isCancel?: boolean,
@@ -55,11 +54,16 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 	}
 
 	private renderImage = () => {
-		// const {images} = this.props;
-		// const src = '';
-		// return (
-		// 	<div><img src={src} alt="city image"/></div>
-		// )
+		const {weather, images} = this.props;
+		let src = '';
+		const x = images.find((el)=> {
+			if(el.city === weather.name){
+				src = el.img;
+			}
+		});
+		return (
+			<div><img src={src} alt="city image"/></div>
+		)
 	};
 	private renderNoImage = () => {
 		return <img src={require('../../assets/city.svg')}  alt="city img"/>

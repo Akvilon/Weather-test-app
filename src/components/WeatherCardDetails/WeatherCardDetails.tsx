@@ -8,22 +8,25 @@ import { Dispatch } from 'redux';
 import { getWeatherDetails } from '../../store/home';
 import { AppState } from '../../store';
 import { Link } from 'react-router-dom';
-import { WeatherDetails } from '../../models';
+import { CityImage, WeatherDetails } from '../../models';
 import { Spinner } from '../../utils/Spinner';
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utils/storage';
 
 interface StateProps {
 	weatherDetails: WeatherDetails | undefined
+	images: CityImage[]
 }
 
 interface DispatchProps {
 	getWeatherDetails: (id: string) => void
 }
 
-export interface WeatherCardDetailsProps extends RouteComponentProps<{ id: string }>{
+export interface WeatherCardDetailsProps extends RouteComponentProps<{ id: string }>{}
 
-}
+const IMG = 'IMG';
 
 class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps & WeatherCardDetailsProps & WithStyles<typeof styles>> {
+
 
 	componentDidMount() {
 		const id = this.props.match.params.id;
@@ -40,13 +43,46 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 		);
 	}
 
+
+	componentWillUnmount(){
+		removeLocalStorage(IMG);
+	}
+
+	private getImage = (items, data) => {
+		if(items && data) {
+			const imgUrl = items.find(el => el.img);
+			return imgUrl ? this.renderImage(items.find(el => el.city === data.city.name).img) : this.renderImageStub();
+			// return items.find(el => {
+			// 	if(el.img && el.city === data.city.name){
+			// 		return <img src={el.img} alt="city image"/>
+			// 	}else  {
+			// 		return <img src={require('../../assets/city.svg')}  alt="city img"/>
+			// 	}
+			// });
+		}else {
+			const details = JSON.parse(getLocalStorage('details'));
+			const images = JSON.parse(getLocalStorage('IMAGES'));
+			const src = images.find(el => el.city === details.city.name).img;
+			return src? this.renderImage(src) : this.renderImageStub();
+			// return images.find(el => {
+			// 	if(el.img && el.city === details.city.name){
+			// 		this.renderImage(el.img);
+			// 	}else {
+			// 		this.renderImageStub()
+			// 	}
+			// });
+
+		}
+	};
+
 	private renderContent = () => {
-		const {classes, weatherDetails} = this.props;
+		const {classes, weatherDetails, images} = this.props;
+
 		return (
 			<>
         <div className={classes.weatherDetailsInfo}>
             <div className={classes.weatherDetailsInfoImage}>
-							{this.renderImage()}
+	            {this.getImage(images, weatherDetails)}
             </div>
             <div className={classes.weatherDetailsInfoData}>
                 <div>
@@ -88,8 +124,9 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 		);
 	};
 
-	private renderImage = () => <img src={require('../../assets/city.svg')}  alt="city img"/>;
 
+	private renderImage = (img) => <img src={img} alt="city image"/>;
+	private renderImageStub = () => <img src={require('../../assets/city.svg')}  alt="city img"/>
 }
 
 
@@ -97,6 +134,7 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 const mapStateToProps = (state: AppState): StateProps => {
 	return {
 		weatherDetails: state.home.weatherDetails,
+		images: state.home.images
 	};
 };
 
