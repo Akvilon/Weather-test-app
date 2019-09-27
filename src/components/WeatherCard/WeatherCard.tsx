@@ -2,6 +2,8 @@ import * as React from 'react';
 import { default as withStyles, WithStyles } from 'react-jss';
 import styles from './WeatherCard.style';
 import { CityImage, WeatherModel } from '../../models';
+import { getLocalStorage } from '../../utils/storage';
+import { Spinner } from '../../utils/Spinner';
 
 
 interface WeatherCardProps {
@@ -17,10 +19,21 @@ interface WeatherCardProps {
 
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 
-
 	render() {
-		const {weather, images, margin, classes, width, isCancel, onCardClick} = this.props;
+		console.log('RENDER card');
+		const {weather} = this.props;
 
+		return (
+			<>
+				{weather ? this.renderContent() : <Spinner />}
+			</>
+
+		);
+	}
+
+	private renderContent = () => {
+		const {weather, images, margin, classes, width, isCancel, onCardClick} = this.props;
+		console.log('IMGG',images);
 		const style = {
 			width: width,
 			margin: margin
@@ -29,7 +42,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 			<>
 				<div className={classes.weatherCard}
 				     style={style}
-						 onClick={() => onCardClick(weather.id)}>
+				     onClick={() => onCardClick(weather.id)}>
 					<div className={classes.weatherCardInfo}>
 						<h3>{weather.name}, {weather.sys.country}</h3>
 						<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
@@ -41,7 +54,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 					</div>
 					<div className={classes.weatherCardImg}>
 						<>
-							{images ? this.renderImage() : this.renderNoImage()}
+							{/*{images? this.getImage(images, weather):null}*/}
 						</>
 					</div>
 				</div>
@@ -50,24 +63,27 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 					<span>x</span>
 				</div>
 			</>
-		)
-	}
-
-	private renderImage = () => {
-		const {weather, images} = this.props;
-		let src = '';
-		const x = images.find((el)=> {
-			if(el.city === weather.name){
-				src = el.img;
-			}
-		});
-		return (
-			<div><img src={src} alt="city image"/></div>
-		)
+		);
 	};
-	private renderNoImage = () => {
-		return <img src={require('../../assets/city.svg')}  alt="city img"/>
-	}
+
+	private getImage = (items, data) => {
+		if(items && data) {
+			const imgUrl = items.find(el => el.city === data.name).img;
+			return imgUrl !== 'noImg' ? this.renderImage(imgUrl) : this.renderImageStub();
+		}else {
+			const list = JSON.parse(getLocalStorage('LIST'));
+			const images = JSON.parse(getLocalStorage('IMAGES'));
+			if(images && list){
+				const src = images.find(el => el.city === list.name).img;
+				return src !== 'noImg' ? this.renderImage(src) : this.renderImageStub();
+			}
+
+		}
+	};
+
+	private renderImage = (img) => <img src={img} alt="city image"/>;
+	private renderImageStub = () => <img src={require('../../assets/city.svg')}  alt="city img"/>;
+
 }
 
 const StyledWeatherCard = withStyles(styles)(WeatherCard);

@@ -8,9 +8,7 @@ import { connect } from 'react-redux';
 import { Action } from '../../store/types';
 import { Dispatch } from 'redux';
 import { setUserCityWeather } from '../../store/home/';
-
-
-
+import { getLocalStorage } from '../../utils/storage';
 
 interface DispatchProps {
 	onChangeUserCityWeather: () => void
@@ -19,12 +17,13 @@ interface DispatchProps {
 interface CurrentCityPanelProps {
 	history: any;
   weather: WeatherModel | undefined,
-	images: CityImage[]
+
 }
 
 class CurrentCityPanel extends React.PureComponent<DispatchProps & CurrentCityPanelProps & WithStyles<typeof styles>> {
 
 	render() {
+		console.log('RENDER cityPanel');
 		const { classes, weather } = this.props;
 		return (
 			<div className={classes.currentCityPanel}>
@@ -35,7 +34,8 @@ class CurrentCityPanel extends React.PureComponent<DispatchProps & CurrentCityPa
 	}
 
 	private renderCurrentCityWeather = () => {
-		const { classes } = this.props;
+		const { classes} = this.props;
+		const images = JSON.parse(getLocalStorage('IMAGES'));
 		return (
 			<>
 				<div>
@@ -48,7 +48,7 @@ class CurrentCityPanel extends React.PureComponent<DispatchProps & CurrentCityPa
 				</div>
 
 				<WeatherCard weather={this.props.weather}
-				             images={this.props.images}
+				             images={images}
 				             width={'65%'}
 				             onCardClick={this.onCardClick}/>
 			</>
@@ -61,6 +61,7 @@ class CurrentCityPanel extends React.PureComponent<DispatchProps & CurrentCityPa
 
 	private renderSearch = () => ( <SearchPanel /> );
 }
+
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => ({
 	onChangeUserCityWeather: () => dispatch(setUserCityWeather(undefined))

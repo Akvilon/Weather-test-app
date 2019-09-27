@@ -21,7 +21,6 @@ import { Spinner } from '../../utils/Spinner';
 interface StateProps {
 	weather: WeatherModel | undefined
 	weatherList: WeatherModel[] | undefined,
-	images: CityImage[],
 	isSignedIn: boolean;
 }
 
@@ -33,15 +32,16 @@ interface DispatchProps {
 
 class Home extends React.PureComponent<StateProps & DispatchProps & RouteComponentProps & WithStyles<typeof styles>> {
 
-	public componentDidMount() {
+	public componentWillMount()  {
 		this.props.readToken();
-		this.props.getUserCityWeather();
 		this.props.getWeatherList();
-	}
+		this.props.getUserCityWeather();
+
+	};
 
     render() {
 
-        const { classes,isSignedIn} = this.props;
+        const { classes,isSignedIn } = this.props;
 
         return(
             <div className={classes.home}>
@@ -72,7 +72,7 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 			);
 		};
 
-		private CurrentCityPanel = () => (<CurrentCityPanel history={this.props.history} weather={this.props.weather} images={this.props.images}/> );
+		private CurrentCityPanel = () => (<CurrentCityPanel history={this.props.history} weather={this.props.weather} /> );
 		private AddItemPanel = () => (<AddItemPanel />);
     private renderSignIn = () => (<SignIn />);
 
@@ -84,7 +84,6 @@ const mapStateToProps = (state: AppState): StateProps => {
 	    isSignedIn: !!state.auth.token,
 	    weather: state.home.weather,
 	    weatherList: state.home.weatherList,
-	    images: state.home.images
     };
 };
 const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => ({

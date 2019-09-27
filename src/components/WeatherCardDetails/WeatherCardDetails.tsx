@@ -14,7 +14,6 @@ import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../util
 
 interface StateProps {
 	weatherDetails: WeatherDetails | undefined
-	images: CityImage[]
 }
 
 interface DispatchProps {
@@ -52,32 +51,17 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 		if(items && data) {
 			const imgUrl = items.find(el => el.img);
 			return imgUrl ? this.renderImage(items.find(el => el.city === data.city.name).img) : this.renderImageStub();
-			// return items.find(el => {
-			// 	if(el.img && el.city === data.city.name){
-			// 		return <img src={el.img} alt="city image"/>
-			// 	}else  {
-			// 		return <img src={require('../../assets/city.svg')}  alt="city img"/>
-			// 	}
-			// });
 		}else {
 			const details = JSON.parse(getLocalStorage('details'));
 			const images = JSON.parse(getLocalStorage('IMAGES'));
 			const src = images.find(el => el.city === details.city.name).img;
 			return src? this.renderImage(src) : this.renderImageStub();
-			// return images.find(el => {
-			// 	if(el.img && el.city === details.city.name){
-			// 		this.renderImage(el.img);
-			// 	}else {
-			// 		this.renderImageStub()
-			// 	}
-			// });
-
 		}
 	};
 
 	private renderContent = () => {
-		const {classes, weatherDetails, images} = this.props;
-
+		const {classes, weatherDetails} = this.props;
+		const images = JSON.parse(getLocalStorage('IMAGES'));
 		return (
 			<>
         <div className={classes.weatherDetailsInfo}>
@@ -134,7 +118,6 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 const mapStateToProps = (state: AppState): StateProps => {
 	return {
 		weatherDetails: state.home.weatherDetails,
-		images: state.home.images
 	};
 };
 

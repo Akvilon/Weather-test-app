@@ -9,23 +9,19 @@ import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
 import { deleteItem, setWeatherList } from '../../store/home';
 import { AppState } from '../../store';
-import { setLocalStorage } from '../../utils/storage';
+import { getLocalStorage, setLocalStorage } from '../../utils/storage';
 
 
 interface WeatherListProps {
 		history: any;
     weatherList: WeatherModel[] | undefined
 }
-interface StateProps {
-    images: CityImage[]
-}
 
 interface DispatchProps {
   onItemDelete: (id: any) => void,
-	setWeatherList: (list: WeatherList) => void
 }
 
-class WeatherList extends React.PureComponent<StateProps & WeatherListProps & DispatchProps & WithStyles<typeof styles>> {
+class WeatherList extends React.PureComponent<WeatherListProps & DispatchProps & WithStyles<typeof styles>> {
 
 	componentDidUpdate(){
 		const list = JSON.stringify(this.props.weatherList);
@@ -33,6 +29,7 @@ class WeatherList extends React.PureComponent<StateProps & WeatherListProps & Di
 	}
 
     render() {
+	    console.log('RENDER list');
         const {classes,weatherList} =this.props;
         return (
             <div className={classes.weatherList}>
@@ -41,23 +38,26 @@ class WeatherList extends React.PureComponent<StateProps & WeatherListProps & Di
         );
     }
 
-    private renderList = ():JSX.Element[] => {
+    private renderList = () => {
         const {weatherList, classes} = this.props;
-        return weatherList.map((cityWeather: WeatherModel)=>{
-            return (
-              <div className={classes.weatherCardWrap}
-                   key={cityWeather.id}>
-		              <WeatherCard
-										 weather={cityWeather}
-										 isCancel={true}
-										 images={this.props.images}
-										 onCardClick={this.onCardClick}
-										 onItemDelete={this.props.onItemDelete}/>
 
-              </div>
 
-            )
-        });
+	        return weatherList.map((cityWeather: WeatherModel)=>{
+		        const images = JSON.parse(getLocalStorage('IMAGES'));
+
+		        return (
+			        <div className={classes.weatherCardWrap}
+			             key={cityWeather.id}>
+				        <WeatherCard
+					        weather={cityWeather}
+					        isCancel={true}
+					        images={images? images.find(el => el.city === cityWeather.name).img: null}
+					        onCardClick={this.onCardClick}
+					        onItemDelete={this.props.onItemDelete}/>
+			        </div>
+		        )
+	        });
+
     };
 
     private onCardClick = (id) => {
@@ -66,20 +66,15 @@ class WeatherList extends React.PureComponent<StateProps & WeatherListProps & Di
 
 }
 
-const mapStateToProps = (state: AppState) => {
-    return {
-        images: state.home.images
-    }
-};
+
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => {
     return {
 			onItemDelete: (id: any) => dispatch(deleteItem(id)),
-	    setWeatherList: (list: WeatherList) => dispatch(setWeatherList(list))
     }
 };
 
-const StyledWeatherList = withStyles(styles)(connect<StateProps,DispatchProps,WeatherListProps>(mapStateToProps, mapDispatchToProps)(WeatherList));
+const StyledWeatherList = withStyles(styles)(connect<undefined,DispatchProps,WeatherListProps>(undefined, mapDispatchToProps)(WeatherList));
 
 export {StyledWeatherList as WeatherList};
 

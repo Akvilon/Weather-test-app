@@ -4,9 +4,7 @@ import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
 import { Coords, WeatherDetails, WeatherModel } from '../../models';
 import {
-	setCityImages,
 	setNewWeatherListItem,
-	setUserCityImage,
 	setUserCityWeather,
 	setWeatherDetails,
 	setWeatherList
@@ -115,28 +113,32 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 						// SET WEATHER TO THE STORE
 						dispatch(setUserCityWeather(weather));
 
-						// // GET ACCESS TOKEN FOR NEXT QUERY
-						const state = getState();
-						const accessToken = state.auth.token.access_token;
-						// GET THE NAME OF THE CITY
-						const cityName = weather.name;
-						// SEARCHING CITY IMAGE
-						// fetchCityImage(accessToken, cityName).then((response: CityImage) => {
-						// console.log(response.results);
-						// if(response.results) {
-						// 	dispatch(setUserCityImage(response.results));
-						// }
-							// if (response.results.length > 0) {
-							// 	const image = response.results.map((x)=>x.urls.small);
-							//
-							// 	// SET IMAGE TO THE LOCAL STORAGE
-							// 	const imgArr = JSON.stringify(image);
-							// 	setLocalStorage('IMAGES', imgArr);
-							// 	// SET IMAGE TO THE STORE
-							// 	dispatch(setUserCityImage(image));
-							//
-							// }
-						// })
+						// fetchCityImage(weather.name).then((image)=>{
+						// 	if(image && image.hits.length > 0){
+						// 		const imgObj = {
+						// 			city: weather.name,
+						// 			img: image.hits[0].webformatURL
+						// 		};
+						// 		// SET IMAGE TO THE LOCAL STORAGE
+						// 		const listImgs = JSON.parse(getLocalStorage('IMAGES'));
+						// 		let newImgArr = [...listImgs, imgObj];
+						// 		const localImages = JSON.stringify(newImgArr);
+						// 		setLocalStorage('IMAGES', localImages);
+						//
+						// 	}else {
+						// 		const imgObj = {
+						// 			city: weather.name,
+						// 			img: 'noImg'
+						// 		};
+						// 		// SET IMAGE TO THE LOCAL STORAGE
+						// 		const listImgs = JSON.parse(getLocalStorage('IMAGES'));
+						// 		let newImgArr = [...listImgs, imgObj];
+						// 		const localImages = JSON.stringify(newImgArr);
+						// 		setLocalStorage('IMAGES', localImages);
+						//
+						// 	}
+						// });
+
 					})
 				}, geolocationFailure);
 			}
@@ -153,12 +155,10 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 	else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
 			try {
 				const json = getLocalStorage('LIST');
-				const storeImages = getLocalStorage('IMAGES');
-				if(json && storeImages) {
+
+				if(json) {
 					const list = JSON.parse(json);
 					dispatch(setWeatherList(list));
-					const images = JSON.parse(storeImages);
-					dispatch(setCityImages(images));
 
 				} else {
 					const queryArr = URLS.map(url => axios.get<WeatherModel>(url));
@@ -166,21 +166,36 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 						let weatherList = results.map(weather=>weather.data);
 						dispatch(setWeatherList(weatherList));
 
+						const list = JSON.stringify(weatherList);
+						setLocalStorage('LIST', list);
+
 						const imagesArr = [];
 						weatherList.map((item)=>{
+
 							fetchCityImage(item.name).then((response) => {
 
-								if(response && response.hits[0].webformatURL) {
+								if(response && response.hits.length > 0) {
 									const imgObj = {
 										city: item.name,
 										img: response.hits[0].webformatURL
 									};
 									imagesArr.push(imgObj);
+									console.log('imagesArr',imagesArr);
 									// SET IMAGE TO THE LOCAL STORAGE
 									const imgs = JSON.stringify(imagesArr);
-									setLocalStorage('IMAGES', imgs);
-									// SET IMAGE TO THE STORE
-									dispatch(setCityImages(imagesArr));
+									setLocalStorage('LIST IMAGES', imgs);
+
+								} else {
+									const imgObj = {
+										city: item.name,
+										img: 'noImg'
+									};
+									imagesArr.push(imgObj);
+
+									// SET IMAGE TO THE LOCAL STORAGE
+									const imgs = JSON.stringify(imagesArr);
+									setLocalStorage('LIST IMAGES', imgs);
+
 								}
 							})
 						});
@@ -203,6 +218,32 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 	    }else {
 		    fetchCityWeather(action.payload).then((res)=>{
 			    dispatch(setNewWeatherListItem(res));
+
+			    // fetchCityImage(res.name).then((image)=>{
+				   //  if(image && image.hits.length > 0){
+					 //    const imgObj = {
+						//     city: res.name,
+						//     img: image.hits[0].webformatURL
+					 //    };
+					 //    // SET IMAGE TO THE LOCAL STORAGE
+					 //    const listImgs = JSON.parse(getLocalStorage('IMAGES'));
+					 //    let newImgArr = [...listImgs, imgObj];
+					 //    const localImages = JSON.stringify(newImgArr);
+					 //    setLocalStorage('IMAGES', localImages);
+			    //
+				   //  }else {
+					 //    const imgObj = {
+						//     city: res.name,
+						//     img: 'noImg'
+					 //    };
+					 //    // SET IMAGE TO THE LOCAL STORAGE
+					 //    const listImgs = JSON.parse(getLocalStorage('IMAGES'));
+					 //    let newImgArr = [...listImgs, imgObj];
+					 //    const localImages = JSON.stringify(newImgArr);
+					 //    setLocalStorage('IMAGES', localImages);
+			    //
+				   //  }
+			    // });
 		    });
 	    }
 	}

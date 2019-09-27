@@ -6,7 +6,6 @@ export interface HomeState {
 	weather: WeatherModel | undefined,
 	weatherDetails: WeatherDetails | undefined,
 	weatherList: WeatherModel[] | undefined,
-	images: CityImage[],
 	activeTheme: string
 }
 
@@ -14,7 +13,6 @@ const INITIAL_STATE = {
 	weather: undefined,
 	weatherDetails: undefined,
 	weatherList: undefined,
-	images: undefined,
 	activeTheme: undefined,
 };
 
@@ -33,14 +31,6 @@ export default (state: HomeState = INITIAL_STATE, action: Action<any>) => {
         case ACTION_TYPES.SET_USER_CITY_WEATHER:
             return {...state, weather: action.payload};
 
-	      case ACTION_TYPES.SET_CITY_IMAGES:
-		      return {...state, images: action.payload};
-
-			  case ACTION_TYPES.SET_USER_CITY_IMAGE:
-						return {
-							...state,
-							images: [action.payload, ...state.images]
-						};
 	    case ACTION_TYPES.SET_WEATHER_DETAILS:
 	      return {...state, weatherDetails: action.payload};
 
