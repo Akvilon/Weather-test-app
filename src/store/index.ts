@@ -5,7 +5,6 @@ import home, {homeMiddlewares} from './home';
 import {HomeState} from "./home/reducer";
 import {AuthState} from "./auth/reducer";
 import auth, {authMiddlewares} from "./auth";
-import { getLocalStorage } from '../utils/storage';
 
 // @ts-ignore
 const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)

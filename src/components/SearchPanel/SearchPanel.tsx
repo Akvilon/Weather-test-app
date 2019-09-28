@@ -44,8 +44,8 @@ class SearchPanel extends React.PureComponent<DispatchProps & WithStyles<typeof 
     private searchItem = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if(this.state.value !== '') {
-					this.props.searchItem(this.state.value);
-					this.setState({value: ''});
+			this.props.searchItem(this.state.value);
+			this.setState({value: ''});
         }
     }
 }

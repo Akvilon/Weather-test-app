@@ -1,6 +1,6 @@
 import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
-import { CityImage, WeatherDetails, WeatherModel } from '../../models';
+import { WeatherDetails, WeatherModel } from '../../models';
 
 export interface HomeState {
 	weather: WeatherModel | undefined,

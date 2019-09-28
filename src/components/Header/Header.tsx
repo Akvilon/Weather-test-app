@@ -18,8 +18,6 @@ interface DispatchProps {
 	onSignOut: () => void;
 	onThemeChange: (theme: string) => void
 }
-
-const THEME = 'THEME';
 const ISCHECKED = 'ISCHECKED';
 
 class Header extends React.PureComponent<StateProps & DispatchProps  & WithStyles<typeof styles>> {
@@ -44,7 +42,6 @@ class Header extends React.PureComponent<StateProps & DispatchProps  & WithStyle
 			setLocalStorage(ISCHECKED, JSON.stringify(false));
 		}
 	}
-
 
 	componentDidUpdate() {
 		this.state.isChecked ? this.props.onThemeChange('dark') : this.props.onThemeChange('light');
@@ -73,7 +70,7 @@ class Header extends React.PureComponent<StateProps & DispatchProps  & WithStyle
 		              </div>
 	              </div>
                 <div>
-									{this.renderAuthControls()}
+					{this.renderAuthControls()}
                 </div>
             </div>
         );
@@ -90,7 +87,7 @@ class Header extends React.PureComponent<StateProps & DispatchProps  & WithStyle
 		if(this.props.isSignedIn){
 			return (
         <>
-					<Button onClick={this.props.onSignOut}>Sign out</Button>
+			<Button onClick={this.props.onSignOut}>Sign out</Button>
         </>
 			);
 		}

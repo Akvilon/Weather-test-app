@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps, Router } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import withStyles, { WithStyles } from 'react-jss';
 import styles from './WeatherCardDetails.style';
 import { connect } from 'react-redux';
@@ -8,9 +8,9 @@ import { Dispatch } from 'redux';
 import { getWeatherDetails } from '../../store/home';
 import { AppState } from '../../store';
 import { Link } from 'react-router-dom';
-import { CityImage, WeatherDetails } from '../../models';
+import { WeatherDetails } from '../../models';
 import { Spinner } from '../../utils/Spinner';
-import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utils/storage';
+import { getLocalStorage } from '../../utils/storage';
 
 interface StateProps {
 	weatherDetails: WeatherDetails | undefined
@@ -22,10 +22,7 @@ interface DispatchProps {
 
 export interface WeatherCardDetailsProps extends RouteComponentProps<{ id: string }>{}
 
-const IMG = 'IMG';
-
 class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps & WeatherCardDetailsProps & WithStyles<typeof styles>> {
-
 
 	componentDidMount() {
 		const id = this.props.match.params.id;
@@ -42,39 +39,21 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 		);
 	}
 
-
-	componentWillUnmount(){
-		removeLocalStorage(IMG);
-	}
-
-	private getImage = (items, data) => {
-		if(items && data) {
-			const imgUrl = items.find(el => el.img);
-			return imgUrl ? this.renderImage(items.find(el => el.city === data.city.name).img) : this.renderImageStub();
-		}else {
-			const details = JSON.parse(getLocalStorage('details'));
-			const images = JSON.parse(getLocalStorage('IMAGES'));
-			const src = images.find(el => el.city === details.city.name).img;
-			return src? this.renderImage(src) : this.renderImageStub();
-		}
-	};
-
 	private renderContent = () => {
 		const {classes, weatherDetails} = this.props;
-		const images = JSON.parse(getLocalStorage('IMAGES'));
+		const images = JSON.parse(getLocalStorage('LIST IMAGES'));
 		return (
 			<>
         <div className={classes.weatherDetailsInfo}>
             <div className={classes.weatherDetailsInfoImage}>
-	            {this.getImage(images, weatherDetails)}
+	            {images ? this.getImage(images, weatherDetails) : null}
             </div>
             <div className={classes.weatherDetailsInfoData}>
                 <div>
-									<h2>Weather in <span>{weatherDetails.city.name}</span> for 5 days</h2>
+					<h2>Weather in <span>{weatherDetails.city.name}</span> for 5 days</h2>
                 </div>
                 <div>
-									<h3>Country: {weatherDetails.city.country}</h3>
-									<h3>Population: {weatherDetails.city.population} people</h3>
+					<h3>Country: {weatherDetails.city.country}</h3>
                 </div>
             </div>
         </div>
@@ -107,12 +86,24 @@ class WeatherCardDetails extends React.PureComponent<StateProps & DispatchProps 
 			</>
 		);
 	};
+	
+	private getImage = (items, data) => {
+		if(items && data) {
+			const imgUrl = items.find(el => el.city === data.city.name);
+			return imgUrl ? this.renderImage(items.find(el => el.city === data.city.name).img) : this.renderImageStub();
+		}else {
+			const details = JSON.parse(getLocalStorage('details'));
+			const images = JSON.parse(getLocalStorage('LIST IMAGES'));
+			const src = images.find(el => el.city === details.city.name).img;
+			return src? this.renderImage(src) : this.renderImageStub();
+		}
+	};
 
-
-	private renderImage = (img) => <img src={img} alt="city image"/>;
-	private renderImageStub = () => <img src={require('../../assets/city.svg')}  alt="city img"/>
+	private renderImage = (img) => {
+		return img !== 'noImg' ? <img src={img} alt="city"/> : <img src={require('../../assets/city.svg')}  alt="city"/>;
+	}
+	private renderImageStub = () => <img src={require('../../assets/city.svg')}  alt="city"/>
 }
-
 
 
 const mapStateToProps = (state: AppState): StateProps => {

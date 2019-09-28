@@ -9,7 +9,7 @@ import { default as withStyles, WithStyles } from 'react-jss';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
 import { readToken } from '../../store/auth';
-import { CityImage, WeatherModel } from '../../models';
+import { WeatherModel } from '../../models';
 import { getUserCityWeather, getWeatherList } from '../../store/home';
 import { Row } from '../../utils/Row';
 import { CurrentCityPanel } from '../CurrentCityPanel';
@@ -36,7 +36,6 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 		this.props.readToken();
 		this.props.getWeatherList();
 		this.props.getUserCityWeather();
-
 	};
 
     render() {
@@ -59,24 +58,22 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
         );
     };
 
-		private renderContent = () => {
-			const {classes, weatherList} = this.props;
-			return (
-				<>
-					<Header />
-					<div className={classes.homeControls}>
-						<Row leftPart={this.AddItemPanel()} leftWidth={'40%'} rightWidth={'60%'} rightPart={this.CurrentCityPanel()}/>
-					</div>
-					<WeatherList history={this.props.history} weatherList={weatherList}/>
-				</>
+	private renderContent = () => {
+		const {classes, weatherList} = this.props;
+		return (
+			<>
+				<Header />
+				<div className={classes.homeControls}>
+					<Row leftPart={this.AddItemPanel()} leftWidth={'40%'} rightWidth={'60%'} rightPart={this.CurrentCityPanel()}/>
+				</div>
+				<WeatherList history={this.props.history} weatherList={weatherList}/>
+			</>
 			);
 		};
 
-		private CurrentCityPanel = () => (<CurrentCityPanel history={this.props.history} weather={this.props.weather} /> );
-		private AddItemPanel = () => (<AddItemPanel />);
+	private CurrentCityPanel = () => (<CurrentCityPanel history={this.props.history} weather={this.props.weather} /> );
+	private AddItemPanel = () => (<AddItemPanel />);
     private renderSignIn = () => (<SignIn />);
-
-
 }
 
 const mapStateToProps = (state: AppState): StateProps => {

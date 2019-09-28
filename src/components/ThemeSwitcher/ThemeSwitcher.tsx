@@ -44,7 +44,6 @@ class ThemeSwitcher extends React.PureComponent<StateProps> {
 		}
 	}
 
-
 	render(){
 		const {theme} = this.state;
 		return (

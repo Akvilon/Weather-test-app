@@ -20,20 +20,17 @@ interface WeatherCardProps {
 class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<typeof styles>> {
 
 	render() {
-		console.log('RENDER card');
 		const {weather} = this.props;
-
 		return (
 			<>
 				{weather ? this.renderContent() : <Spinner />}
 			</>
-
 		);
 	}
 
 	private renderContent = () => {
-		const {weather, images, margin, classes, width, isCancel, onCardClick} = this.props;
-		console.log('IMGG',images);
+		const {weather, margin, classes, width, isCancel, onCardClick} = this.props;
+		const localImages = JSON.parse(getLocalStorage('LIST IMAGES'));
 		const style = {
 			width: width,
 			margin: margin
@@ -54,7 +51,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 					</div>
 					<div className={classes.weatherCardImg}>
 						<>
-							{/*{images? this.getImage(images, weather):null}*/}
+							{localImages ? this.getImage(localImages, weather):null}
 						</>
 					</div>
 				</div>
@@ -72,7 +69,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 			return imgUrl !== 'noImg' ? this.renderImage(imgUrl) : this.renderImageStub();
 		}else {
 			const list = JSON.parse(getLocalStorage('LIST'));
-			const images = JSON.parse(getLocalStorage('IMAGES'));
+			const images = JSON.parse(getLocalStorage('LIST IMAGES'));
 			if(images && list){
 				const src = images.find(el => el.city === list.name).img;
 				return src !== 'noImg' ? this.renderImage(src) : this.renderImageStub();
@@ -81,8 +78,8 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 		}
 	};
 
-	private renderImage = (img) => <img src={img} alt="city image"/>;
-	private renderImageStub = () => <img src={require('../../assets/city.svg')}  alt="city img"/>;
+	private renderImage = (img) => <img src={img} alt="city"/>;
+	private renderImageStub = () => <img src={require('../../assets/city.svg')}  alt="city"/>;
 
 }
 

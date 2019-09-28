@@ -2,18 +2,17 @@ import * as React from 'react';
 import styles from './WeatherList.style';
 import {default as withStyles, WithStyles} from 'react-jss';
 import { Spinner } from '../../utils/Spinner/Spinner';
-import { CityImage, WeatherModel } from '../../models';
+import { WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Action } from '../../store/types';
-import { deleteItem, setWeatherList } from '../../store/home';
-import { AppState } from '../../store';
+import { deleteItem } from '../../store/home';
 import { getLocalStorage, setLocalStorage } from '../../utils/storage';
 
 
 interface WeatherListProps {
-		history: any;
+	history: any;
     weatherList: WeatherModel[] | undefined
 }
 
@@ -29,7 +28,6 @@ class WeatherList extends React.PureComponent<WeatherListProps & DispatchProps &
 	}
 
     render() {
-	    console.log('RENDER list');
         const {classes,weatherList} =this.props;
         return (
             <div className={classes.weatherList}>
@@ -40,10 +38,8 @@ class WeatherList extends React.PureComponent<WeatherListProps & DispatchProps &
 
     private renderList = () => {
         const {weatherList, classes} = this.props;
-
-
 	        return weatherList.map((cityWeather: WeatherModel)=>{
-		        const images = JSON.parse(getLocalStorage('IMAGES'));
+		        const images = JSON.parse(getLocalStorage('LIST IMAGES'));
 
 		        return (
 			        <div className={classes.weatherCardWrap}
@@ -57,20 +53,16 @@ class WeatherList extends React.PureComponent<WeatherListProps & DispatchProps &
 			        </div>
 		        )
 	        });
-
     };
 
     private onCardClick = (id) => {
 			this.props.history.push(`/details/${id}`);
     }
-
 }
-
-
 
 const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => {
     return {
-			onItemDelete: (id: any) => dispatch(deleteItem(id)),
+		onItemDelete: (id: any,) => dispatch(deleteItem(id)),
     }
 };
 

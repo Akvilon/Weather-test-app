@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {default as withStyles, WithStyles} from 'react-jss';
 import styles from './CurrentCityPanel.style';
-import { CityImage, WeatherModel } from '../../models';
+import { WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
 import { SearchPanel } from '../SearchPanel';
 import { connect } from 'react-redux';
@@ -23,13 +23,12 @@ interface CurrentCityPanelProps {
 class CurrentCityPanel extends React.PureComponent<DispatchProps & CurrentCityPanelProps & WithStyles<typeof styles>> {
 
 	render() {
-		console.log('RENDER cityPanel');
 		const { classes, weather } = this.props;
+		console.log(weather);
 		return (
 			<div className={classes.currentCityPanel}>
 				{weather ? this.renderCurrentCityWeather() : this.renderSearch()}
 			</div>
-
 		);
 	}
 
@@ -44,7 +43,6 @@ class CurrentCityPanel extends React.PureComponent<DispatchProps & CurrentCityPa
 						<h4>Not your city?</h4>
 						<button onClick={this.props.onChangeUserCityWeather}>Click here</button>
 					</div>
-
 				</div>
 
 				<WeatherCard weather={this.props.weather}
