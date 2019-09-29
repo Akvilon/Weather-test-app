@@ -112,10 +112,13 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 								};
 								// SET IMAGE TO THE LOCAL STORAGE
 								const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-								let newImgArr = [...listImgs, imgObj];
-								const localImages = JSON.stringify(newImgArr);
-								setLocalStorage('IMAGES', localImages);
-								dispatch(setUserCityWeather(weather));
+								if(listImgs) {
+									let newImgArr = [...listImgs, imgObj];
+									const localImages = JSON.stringify(newImgArr);
+									setLocalStorage('LIST IMAGES', localImages);
+									dispatch(setUserCityWeather(weather));
+								}
+								
 							}else {
 								const imgObj = {
 									city: weather.name,
@@ -123,10 +126,13 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 								};
 								// SET IMAGE TO THE LOCAL STORAGE
 								const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-								let newImgArr = [...listImgs, imgObj];
-								const localImages = JSON.stringify(newImgArr);
-								setLocalStorage('IMAGES', localImages);
-								dispatch(setUserCityWeather(weather));
+								if(listImgs){
+									let newImgArr = [...listImgs, imgObj];
+									const localImages = JSON.stringify(newImgArr);
+									setLocalStorage('LIST IMAGES', localImages);
+									dispatch(setUserCityWeather(weather));
+								}
+								
 							}
 						});
 					})

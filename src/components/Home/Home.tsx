@@ -39,7 +39,6 @@ class Home extends React.PureComponent<StateProps & DispatchProps & RouteCompone
 	};
 
     render() {
-
         const { classes,isSignedIn } = this.props;
 
         return(

@@ -76,7 +76,7 @@ export default (theme) => ({
 	backArrow: {
 		position: 'fixed',
 		top: '35px',
-		left: '330px',
+		left: '165px',
 		'& img': {
 			height: '45px',
 		}

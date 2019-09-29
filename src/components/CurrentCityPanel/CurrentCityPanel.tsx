@@ -16,7 +16,7 @@ interface DispatchProps {
 
 interface CurrentCityPanelProps {
 	history: any;
-  weather: WeatherModel | undefined,
+    weather: WeatherModel | undefined,
 
 }
 
