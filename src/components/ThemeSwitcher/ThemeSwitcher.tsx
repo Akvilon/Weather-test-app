@@ -4,6 +4,7 @@ import { lightTheme, darkTheme } from '../../styles';
 import { ThemeProvider } from 'theming';
 import { AppState } from '../../store';
 import { getLocalStorage, setLocalStorage } from '../../utils/storage';
+import { Theme } from '../../models';
 
 
 interface StateProps  {
@@ -23,7 +24,7 @@ class ThemeSwitcher extends React.PureComponent<StateProps> {
 
 		const themeMode = getLocalStorage(THEME);
 		if(themeMode){
-			if(themeMode === 'light'){
+			if(themeMode === Theme.light){
 				this.setState({theme: lightTheme});
 			}else {
 				this.setState({theme: darkTheme});
@@ -35,7 +36,7 @@ class ThemeSwitcher extends React.PureComponent<StateProps> {
 
 	componentDidUpdate() {
 		const {activeTheme} = this.props;
-		if(activeTheme === 'light'){
+		if(activeTheme === Theme.light){
 			this.setState({theme: lightTheme});
 			setLocalStorage(THEME, 'light')
 		}else {
@@ -57,11 +58,11 @@ class ThemeSwitcher extends React.PureComponent<StateProps> {
 
 const mapStateToProps = (state: AppState): StateProps => {
 	return {
-		activeTheme: state.home.activeTheme
+		activeTheme: state.theme.activeTheme
 	}
 };
 
 
-const ConnectedThemeSwitcher = connect<StateProps>(mapStateToProps, undefined)(ThemeSwitcher);
+const ConnectedThemeSwitcher = connect<StateProps>(mapStateToProps)(ThemeSwitcher);
 
 export {ConnectedThemeSwitcher as ThemeSwitcher}

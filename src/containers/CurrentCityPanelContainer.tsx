@@ -2,7 +2,7 @@ import * as React from 'react';
 import { WeatherModel } from '../models';
 import { Dispatch } from 'redux';
 import { Action } from '../store/types';
-import { deleteItem, getUserCityWeather, setUserCityWeather } from '../store/home';
+import { deleteItem, getUserCityWeather } from '../store/home';
 import { connect } from 'react-redux';
 import { AppState } from '../store';
 import { CurrentCityPanel } from '../components/CurrentCityPanel';
@@ -28,25 +28,12 @@ class CurrentCityPanelContainer extends React.PureComponent<StateProps & Dispatc
 
 	render() {
 		const {weatherList} = this.props;
-		console.log('PANEL CONT',weatherList);
+
 		return (
 			<div>
 				{weatherList ? this.renderCityPanel(weatherList) : null}
 			</div>
 		)
-		// if(weatherList){
-		// 	console.log('weatherList',weatherList);
-		// 	const panelWeather = this.transformWeatherList('user', 'marker', weatherList);
-		// 	return (
-		// 		<CurrentCityPanel weather={panelWeather}
-		// 		                  onChangeUserCityWeather={this.props.onChangeUserCityWeather}
-		// 		                  onCardClick={this.onCardClick}/>
-		// 	);
-		// }else {
-		// 	return null
-		// }
-
-
 	}
 
 	private renderCityPanel = (arr) => {

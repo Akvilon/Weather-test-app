@@ -7,6 +7,8 @@ import {AuthState} from "./auth/reducer";
 import auth, {authMiddlewares} from "./auth";
 import { ImagesState } from './images/reducer';
 import images, {imagesMiddlewares} from "./images";
+import { ThemeState } from './theme/reducer';
+import theme from './theme';
 
 // @ts-ignore
 const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
@@ -17,6 +19,7 @@ const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDU
 export interface AppState {
 		auth: AuthState;
     home: HomeState;
+    theme: ThemeState;
     images: ImagesState
 }
 
@@ -24,6 +27,7 @@ const rootReducer = (history: History) => combineReducers(
     {
 	      auth,
         home,
+	      theme,
 	      images,
         router: connectRouter(history)
     }

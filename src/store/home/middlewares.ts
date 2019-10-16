@@ -4,11 +4,9 @@ import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
 import { WeatherDetails, WeatherModel } from '../../models';
 import {
-	overwriteWeatherList,
+	setWeatherList,
 	setNewWeatherListItem,
-	setUserCityWeather,
-	setWeatherDetails,
-	setWeatherList
+	setWeatherDetails
 } from './actions';
 import { getLocalStorage, setLocalStorage } from '../../utils/storage';
 

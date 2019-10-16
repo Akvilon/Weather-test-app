@@ -8,7 +8,7 @@ import { Action } from '../../store/types';
 import { connect } from 'react-redux';
 import { clearToken } from '../../store/auth';
 import { Button } from '../../utils/Button';
-import { setActiveTheme } from '../../store/home';
+import { setActiveTheme } from '../../store/theme';
 import { getLocalStorage, localStorageExists, setLocalStorage } from '../../utils/storage';
 
 interface StateProps {

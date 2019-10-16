@@ -1,0 +1,6 @@
+
+
+
+export enum ACTION_TYPES {
+	SET_ACTIVE_THEME='@@HOME/SET_ACTIVE_THEME'
+}
