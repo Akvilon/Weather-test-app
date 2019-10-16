@@ -9,7 +9,7 @@ import { Spinner } from '../../utils/Spinner';
 interface WeatherCardProps {
 	id?: number;
 	weather: WeatherModel | undefined,
-	images: CityImage[]
+	images?: CityImage[]
 	width?: string,
 	margin?: string,
 	isCancel?: boolean,
@@ -21,6 +21,7 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 
 	render() {
 		const {weather} = this.props;
+
 		return (
 			<>
 				{weather ? this.renderContent() : <Spinner />}
@@ -35,32 +36,35 @@ class WeatherCard extends React.PureComponent<WeatherCardProps & WithStyles<type
 			width: width,
 			margin: margin
 		};
-		return (
-			<>
-				<div className={classes.weatherCard}
-				     style={style}
-				     onClick={() => onCardClick(weather.id)}>
-					<div className={classes.weatherCardInfo}>
-						<h3>{weather.name}, {weather.sys.country}</h3>
-						<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
-						<div className={classes.weatherConditions}>
-							<h3>{weather.weather[0].description}</h3>
-							<img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt="condition icon"/>
+		if(weather){
+			return (
+				<>
+					<div className={classes.weatherCard}
+					     style={style}
+					     onClick={() => onCardClick(weather.id)}>
+						<div className={classes.weatherCardInfo}>
+							<h3>{weather.name}, {weather.sys.country}</h3>
+							<h2>{weather.main.temp.toFixed(1)} &deg;</h2>
+							<div className={classes.weatherConditions}>
+								<h3>{weather.weather[0].description}</h3>
+								<img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt="condition icon"/>
+							</div>
+
 						</div>
-
+						<div className={classes.weatherCardImg}>
+							<>
+								{/*{localImages ? this.getImage(localImages, weather):null}*/}
+							</>
+						</div>
 					</div>
-					<div className={classes.weatherCardImg}>
-						<>
-							{localImages ? this.getImage(localImages, weather):null}
-						</>
-					</div>
-				</div>
 
-				<div className={isCancel? classes.cross : classes.croossInvis} onClick={() =>this.props.onItemDelete(weather.id)}>
-					<span>x</span>
-				</div>
-			</>
-		);
+					<div className={isCancel? classes.cross : classes.croossInvis} onClick={() =>this.props.onItemDelete(weather.id)}>
+						<span>x</span>
+					</div>
+				</>
+			);
+		}
+
 	};
 
 	private getImage = (items, data) => {

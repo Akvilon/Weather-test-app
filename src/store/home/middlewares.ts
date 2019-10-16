@@ -4,6 +4,7 @@ import {Action} from "../types";
 import {ACTION_TYPES} from "./constants";
 import { WeatherDetails, WeatherModel } from '../../models';
 import {
+	overwriteWeatherList,
 	setNewWeatherListItem,
 	setUserCityWeather,
 	setWeatherDetails,
@@ -15,8 +16,7 @@ import { getLocalStorage, setLocalStorage } from '../../utils/storage';
 const weatherBaseUrl = process.env.REACT_APP_WEATHER_BASE_URL;
 const weatherApiKey = process.env.REACT_APP_WEATHER_API_KEY;
 
-const pixabayBaseUrl = process.env.REACT_APP_PIXABAY_BASE_URL;
-const pixabayApiKey = process.env.REACT_APP_PIXABAY_API_KEY;
+const LIST = 'LIST';
 
 const URLS = [
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=London&units=metric`,
@@ -25,7 +25,7 @@ const URLS = [
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Berlin&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Paris&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Madrid&units=metric`,
-	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Kiev&units=metric`,
+	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Washington&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Prague&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Amsterdam&units=metric`,
 	`${weatherBaseUrl}/data/2.5/weather?appid=${weatherApiKey}&q=Istanbul&units=metric`,
@@ -83,19 +83,13 @@ const geolocationFailure = (positionError) => {
 	}
 };
 
-const fetchCityImage = async (cityName: string) => {
-	try {
-		const CITY_PHOTOS_URL = `${pixabayBaseUrl}?key=${pixabayApiKey}&q=${cityName}&image_type=photo&category=buildings&page=1&per_page=3`;
-		const response = await axios.get(CITY_PHOTOS_URL);
-		return response.data;
-	}
-	catch (e) {
-		throw e;
-	}
-};
-
 const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action<any>) => void) => (action: Action<any>) => {
     if(action.type === ACTION_TYPES.GET_USER_CITY_WEATHER) {
+
+	    const data = JSON.parse(getLocalStorage(LIST));
+	    if(data && data.find(el => el.marker === 'user')){
+		    return;
+	    }
     	// GET LATITUDE AND LONGITUDE OF CURRENT USER CITY
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition( position => {
@@ -103,38 +97,19 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 					let longitude =  position.coords.longitude;
 					// SEARCHING USER CURRENT CITY WEATHER
 					fetchCurrentCity(latitude, longitude).then((weather: WeatherModel)=>{
+						weather.marker = 'user';
 						// SET WEATHER TO THE STORE
-						fetchCityImage(weather.name).then((image)=>{
-							if(image && image.hits.length > 0){
-								const imgObj = {
-									city: weather.name,
-									img: image.hits[0].webformatURL
-								};
-								// SET IMAGE TO THE LOCAL STORAGE
-								const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-								if(listImgs) {
-									let newImgArr = [...listImgs, imgObj];
-									const localImages = JSON.stringify(newImgArr);
-									setLocalStorage('LIST IMAGES', localImages);
-									dispatch(setUserCityWeather(weather));
-								}
-								
+						dispatch(setNewWeatherListItem(weather));
+
+						const data = JSON.parse(getLocalStorage(LIST));
+						if(data) {
+							if(data.find(el => el.name === weather.name)) {
+								return
 							}else {
-								const imgObj = {
-									city: weather.name,
-									img: 'noImg'
-								};
-								// SET IMAGE TO THE LOCAL STORAGE
-								const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-								if(listImgs){
-									let newImgArr = [...listImgs, imgObj];
-									const localImages = JSON.stringify(newImgArr);
-									setLocalStorage('LIST IMAGES', localImages);
-									dispatch(setUserCityWeather(weather));
-								}
-								
+								const newLocalList = [weather, ...data];
+								setLocalStorage(LIST, JSON.stringify(newLocalList));
 							}
-						});
+						}
 					})
 				}, geolocationFailure);
 			}
@@ -142,75 +117,49 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 				alert('Your browser does not support geolocation');
 			}
 	}
+
 	else if(action.type === ACTION_TYPES.SEARCH_USER_CITY_WEATHER ){
 	    fetchCityWeather(action.payload).then((res)=>{
-			fetchCityImage(res.name).then((image)=>{				
-				if(image && image.hits.length > 0){
-					const imgObj = {
-						city: res.name,
-						img: image.hits[0].webformatURL
-					};
-					// SET IMAGE TO THE LOCAL STORAGE
-					const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-					let newImgArr = [...listImgs, imgObj];
-					const localImages = JSON.stringify(newImgArr);
-					setLocalStorage('LIST IMAGES', localImages);
-					dispatch(setUserCityWeather(res));
-				}else {
-					const imgObj = {
-						city: res.name,
-						img: 'noImg'
-					};
-					// SET IMAGE TO THE LOCAL STORAGE
-					const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-					let newImgArr = [...listImgs, imgObj];
-					const localImages = JSON.stringify(newImgArr);
-					setLocalStorage('LIST IMAGES', localImages);
-					dispatch(setUserCityWeather(res));
-				}
-			});
+	    	const state = getState();
+	    	const list = state.home.weatherList;
+	    	const isAlreadyInList = list.find(el => el.id === res.id);
+
+	    	if(isAlreadyInList){
+	    		alert('You already have this city in list below')
+		    }else {
+			    res.marker = 'user';
+
+			    dispatch(setNewWeatherListItem(res));
+
+			    const data = JSON.parse(getLocalStorage(LIST));
+			    const newLocalList = [res, ...data];
+			    setLocalStorage(LIST, JSON.stringify(newLocalList));
+		    }
+
 	    });
 	}
+
 	else if(action.type === ACTION_TYPES.GET_WEATHER_LIST) {
 			try {
-				const json = getLocalStorage('LIST');
+				const json = getLocalStorage(LIST);
 				if(json) {
 					const list = JSON.parse(json);
 					dispatch(setWeatherList(list));
 
 				} else {
 					const queryArr = URLS.map(url => axios.get<WeatherModel>(url));
+
 					axios.all(queryArr).then(function ( results ) {
-						let weatherList = results.map(weather=>weather.data);
-						dispatch(setWeatherList(weatherList));
-						const list = JSON.stringify(weatherList);
-						setLocalStorage('LIST', list);
+						const listArr = [];
+						results.map(weather=>weather.data)
+									 .map(obj => {
+									 	  obj.marker = 'list';
+									 	  listArr.push(obj);
+									 });
+						dispatch(setWeatherList(listArr));
 
-						const imagesArr = [];
-
-						weatherList.map((item)=>{
-							fetchCityImage(item.name).then((response) => {
-								if(response && response.hits.length > 0) {
-									const imgObj = {
-										city: item.name,
-										img: response.hits[0].webformatURL
-									};
-									imagesArr.push(imgObj);
-									// SET IMAGE TO THE LOCAL STORAGE
-									const imgs = JSON.stringify(imagesArr);
-									setLocalStorage('LIST IMAGES', imgs);
-								} else {
-									const imgObj = {
-										city: item.name,
-										img: 'noImg'
-									};
-									imagesArr.push(imgObj);
-									// SET IMAGE TO THE LOCAL STORAGE
-									const imgs = JSON.stringify(imagesArr);
-									setLocalStorage('LIST IMAGES', imgs);
-								}
-							})
-						});
+						const list = JSON.stringify(listArr);
+						setLocalStorage(LIST, list);
 					});
 				}
 			}
@@ -218,41 +167,28 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 				throw e;
 			}
 		}
+    else if (action.type === ACTION_TYPES.GET_WEATHER_DETAILS) {
+	    fetchWeatherDetails(action.payload).then((res)=>{
+
+		    const cardDetails = JSON.stringify(res);
+		    setLocalStorage('details', cardDetails);
+		    dispatch(setWeatherDetails(res));
+	    });
+    }
     else if(action.type === ACTION_TYPES.GET_NEW_WEATHER_LIST_ITEM) {
     	const state = getState();
 	    const list = state.home.weatherList;
-	    const cityNames = list.map((city) => city.name.toUpperCase());
+	    const cityNames = list.map(city => city.name.toUpperCase());
 
 	    if(cityNames.indexOf(action.payload) !== -1) {
 				alert('You already have this city in your list');
 	    }else {
 		    fetchCityWeather(action.payload).then((res)=>{
-				
-			    fetchCityImage(res.name).then((image)=>{
-				    if(image && image.hits.length > 0){
-					    const imgObj = {
-						    city: res.name,
-						    img: image.hits[0].webformatURL
-					    };
-					    // SET IMAGE TO THE LOCAL STORAGE
-					    const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-					    let newImgArr = [...listImgs, imgObj];
-					    const localImages = JSON.stringify(newImgArr);
-					    setLocalStorage('LIST IMAGES', localImages);
-						dispatch(setNewWeatherListItem(res));
-				    }else {
-					    const imgObj = {
-						    city: res.name,
-						    img: 'noImg'
-					    };
-					    // SET IMAGE TO THE LOCAL STORAGE
-					    const listImgs = JSON.parse(getLocalStorage('LIST IMAGES'));
-					    let newImgArr = [...listImgs, imgObj];
-					    const localImages = JSON.stringify(newImgArr);
-					    setLocalStorage('LIST IMAGES', localImages);
-						dispatch(setNewWeatherListItem(res));
-				    }
-				});
+			    const state = getState();
+			    const list = state.home.weatherList;
+			    res.marker = 'list';
+			    const newArr = [res, ...list];
+			    dispatch(setWeatherList(newArr));
 		    });
 	    }
 	}
@@ -266,16 +202,19 @@ const fetchMiddleware = ({ getState, dispatch}: Store) => (next: (action: Action
 				...list.slice(0, index),
 				...list.slice(index + 1)
 			];
-			dispatch(setWeatherList(newWeatherList));
-	}
-	else if (action.type === ACTION_TYPES.GET_WEATHER_DETAILS) {
-	    fetchWeatherDetails(action.payload).then((res)=>{
 
-	    	const cardDetails = JSON.stringify(res);
-	    	setLocalStorage('details', cardDetails);
-		    dispatch(setWeatherDetails(res));
-	    });
-    }
+	    const data = JSON.parse(getLocalStorage(LIST));
+	    const localIndex = data.findIndex((el)=> el.id === id);
+	    const newLocalWeatherList = [
+		    ...data.slice(0, localIndex),
+		    ...data.slice(index + 1)
+	    ];
+			dispatch(setWeatherList(newWeatherList));
+
+	    const localList = JSON.stringify(newLocalWeatherList);
+	    setLocalStorage(LIST, localList);
+	}
+
     next(action);
 };
 

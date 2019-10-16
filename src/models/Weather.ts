@@ -51,6 +51,7 @@
 		id: number;
 		name: string;
 		cod: number;
+		marker?: string
 	}
 
 

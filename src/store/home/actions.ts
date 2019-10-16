@@ -1,15 +1,6 @@
 import {ACTION_TYPES} from "./constants";
 
 
-export const getUserCityWeather = () => ({
-    type: ACTION_TYPES.GET_USER_CITY_WEATHER
-});
-
-export const setUserCityWeather = (weather) => ({
-	type: ACTION_TYPES.SET_USER_CITY_WEATHER,
-  	payload: weather
-});
-
 export const getWeatherList = () => ({
 	type: ACTION_TYPES.GET_WEATHER_LIST
 });
@@ -19,15 +10,9 @@ export const setWeatherList = (weatherList) => ({
 	payload: weatherList
 });
 
-
-export const getNewWeatherListItem = (item) => ({
-	type: ACTION_TYPES.GET_NEW_WEATHER_LIST_ITEM,
-	payload: item
-});
-
-export const setNewWeatherListItem = (item) => ({
-	type: ACTION_TYPES.SET_NEW_WEATHER_LIST_ITEM,
-	payload: item
+export const overwriteWeatherList = (weatherList) => ({
+	type: ACTION_TYPES.OVERWRITE_WEATHER_LIST,
+	payload: weatherList
 });
 
 export const deleteItem = (id) => ({
@@ -39,6 +24,34 @@ export const searchUserCity = (item) => ({
 	type: ACTION_TYPES.SEARCH_USER_CITY_WEATHER,
 	payload: item
 });
+
+export const getNewWeatherListItem = (item) => ({
+	type: ACTION_TYPES.GET_NEW_WEATHER_LIST_ITEM,
+	payload: item
+});
+
+
+
+
+export const getUserCityWeather = () => ({
+    type: ACTION_TYPES.GET_USER_CITY_WEATHER
+});
+
+export const setUserCityWeather = (weather) => ({
+	type: ACTION_TYPES.SET_USER_CITY_WEATHER,
+  	payload: weather
+});
+
+
+
+export const setNewWeatherListItem = (item) => ({
+	type: ACTION_TYPES.SET_NEW_WEATHER_LIST_ITEM,
+	payload: item
+});
+
+
+
+
 
 export const getWeatherDetails = (id) => ({
 	type: ACTION_TYPES.GET_WEATHER_DETAILS,

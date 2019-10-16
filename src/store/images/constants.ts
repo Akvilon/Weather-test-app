@@ -1,0 +1,6 @@
+
+
+export enum ACTION_TYPES {
+    GET_IMAGES='@@IMAGES/GET_IMAGES',
+    SET_IMAGES='@@IMAGES/SET_IMAGES',
+}

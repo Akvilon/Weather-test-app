@@ -4,28 +4,17 @@ import {default as withStyles, WithStyles} from 'react-jss';
 import { Spinner } from '../../utils/Spinner/Spinner';
 import { WeatherModel } from '../../models';
 import { WeatherCard } from '../WeatherCard';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { Action } from '../../store/types';
-import { deleteItem } from '../../store/home';
-import { getLocalStorage, setLocalStorage } from '../../utils/storage';
+import { getLocalStorage } from '../../utils/storage';
 
 
 interface WeatherListProps {
-	history: any;
-    weatherList: WeatherModel[] | undefined
+	weatherList: WeatherModel[] | undefined,
+	onCardClick: (id: any) => void,
+	onItemDelete: (id:any) => void
 }
 
-interface DispatchProps {
-  onItemDelete: (id: any) => void,
-}
 
-class WeatherList extends React.PureComponent<WeatherListProps & DispatchProps & WithStyles<typeof styles>> {
-
-	componentDidUpdate(){
-		const list = JSON.stringify(this.props.weatherList);
-		setLocalStorage('LIST', list);
-	}
+class WeatherList extends React.PureComponent<WeatherListProps & WithStyles<typeof styles>> {
 
     render() {
         const {classes,weatherList} =this.props;
@@ -38,35 +27,26 @@ class WeatherList extends React.PureComponent<WeatherListProps & DispatchProps &
 
     private renderList = () => {
         const {weatherList, classes} = this.props;
-	        return weatherList.map((cityWeather: WeatherModel)=>{
+	        return weatherList.map((weather: WeatherModel)=>{
 		        const images = JSON.parse(getLocalStorage('LIST IMAGES'));
 
 		        return (
 			        <div className={classes.weatherCardWrap}
-			             key={cityWeather.id}>
+			             key={weather.id}>
 				        <WeatherCard
-					        weather={cityWeather}
+					        weather={weather}
 					        isCancel={true}
-					        images={images? images.find(el => el.city === cityWeather.name).img: null}
-					        onCardClick={this.onCardClick}
+					        images={images? images.find(el => el.city === weather.name).img: null}
+					        onCardClick={() => this.props.onCardClick(weather.id)}
 					        onItemDelete={this.props.onItemDelete}/>
 			        </div>
 		        )
 	        });
     };
 
-    private onCardClick = (id) => {
-			this.props.history.push(`/details/${id}`);
-    }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<Action<any>>) => {
-    return {
-		onItemDelete: (id: any,) => dispatch(deleteItem(id)),
-    }
-};
-
-const StyledWeatherList = withStyles(styles)(connect<undefined,DispatchProps,WeatherListProps>(undefined, mapDispatchToProps)(WeatherList));
+const StyledWeatherList = withStyles(styles)(WeatherList);
 
 export {StyledWeatherList as WeatherList};
 

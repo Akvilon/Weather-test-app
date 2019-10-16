@@ -5,6 +5,8 @@ import home, {homeMiddlewares} from './home';
 import {HomeState} from "./home/reducer";
 import {AuthState} from "./auth/reducer";
 import auth, {authMiddlewares} from "./auth";
+import { ImagesState } from './images/reducer';
+import images, {imagesMiddlewares} from "./images";
 
 // @ts-ignore
 const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
@@ -15,12 +17,14 @@ const composeEnhancers = (process.env.NODE_ENV !== 'production' && window.__REDU
 export interface AppState {
 		auth: AuthState;
     home: HomeState;
+    images: ImagesState
 }
 
 const rootReducer = (history: History) => combineReducers(
     {
 	      auth,
         home,
+	      images,
         router: connectRouter(history)
     }
 );
@@ -33,7 +37,8 @@ export default (history) => {
             applyMiddleware(
                 routerMiddleware(history),
                 ...authMiddlewares,
-							  ...homeMiddlewares
+							  ...homeMiddlewares,
+	              ...imagesMiddlewares
             )
         )
     );
